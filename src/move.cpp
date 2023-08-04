@@ -2,15 +2,12 @@
 #include <array>
 #include <random>
 
-void checkAndAdd(Tile *first, Tile *second);
-void singleMove(bool *firstIter, Tile *mainTile, bool *wasMergedCurr,
-                Tile *secondTile, bool *wasMergedSecond);
-void singleMove(bool *firstIter, Tile *mainTile,
-                bool *wasMergedCurr); // overload for last rows
+void checkAndAdd(Tile* first, Tile* second);
+void singleMove(bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
+void singleMove(bool* firstIter, Tile* mainTile, bool* wasMergedCurr); // overload for last rows
 
 template <size_t N, size_t M>
-Move::Return Move::Move(std::array<std::array<Tile, M>, N> *matrix,
-                        Move::Direction direction) {
+Move::Return Move::Move(std::array<std::array<Tile, M>, N>* matrix, Move::Direction direction) {
     switch (direction) {
     case Move::Direction::Up: {
         const int maxColl = matrix->at(0).size();
@@ -111,7 +108,7 @@ Move::Return Move::Move(std::array<std::array<Tile, M>, N> *matrix,
     return Move::Return::Ok;
 }
 
-void checkAndAdd(Tile *first, Tile *second) {
+void checkAndAdd(Tile* first, Tile* second) {
     if ((second->value == 0) && (first->value != 0)) {
         second->setValue(first->value);
         first->setValue(0);
@@ -122,13 +119,12 @@ void checkAndAdd(Tile *first, Tile *second) {
 }
 
 // normal
-void singleMove(bool *firstIter, Tile *mainTile, bool *wasMergedCurr,
-                Tile *secondTile, bool *wasMergedSecond) {
+void singleMove(bool* firstIter, Tile* mainTile, bool* wasMergedCurr,
+                Tile* secondTile, bool* wasMergedSecond) {
     if ((mainTile->value == 0 || !(*firstIter))) {
         *firstIter = false;
         mainTile->setValue(secondTile->value);
-    } else if (mainTile->value == secondTile->value && (!(*wasMergedCurr)) &&
-               (!(*wasMergedSecond))) {
+    } else if (mainTile->value == secondTile->value && (!(*wasMergedCurr)) && (!(*wasMergedSecond))) {
         *firstIter = false;
         mainTile->setValue(mainTile->value * 2);
         *wasMergedCurr = true;
@@ -136,20 +132,20 @@ void singleMove(bool *firstIter, Tile *mainTile, bool *wasMergedCurr,
 }
 
 // last row/collumn
-void singleMove(bool *firstIter, Tile *mainTile, bool *wasMergedCurr) {
+void singleMove(bool* firstIter, Tile* mainTile, bool* wasMergedCurr) {
     if (mainTile->value == 0 || !(*firstIter)) {
         *firstIter = false;
         mainTile->setValue(0);
     }
 }
 
-void Move::addRandTwos(Tile *tile, unsigned char probability) {
+void Move::addRandTwos(Tile* tile, unsigned char probability) {
     // probapility is the chance of showing new 2 on every move
     if (tile->value == 0) {
         std::random_device r;
         std::default_random_engine eng(r());
         std::uniform_int_distribution<int> uniform_dist(
-            1, probability); 
+            1, probability);
         if (uniform_dist(eng) == 1) {
             tile->setValue(2, true);
         }

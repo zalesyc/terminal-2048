@@ -6,7 +6,7 @@
 
 class Tile {
   public:
-    WINDOW *window;
+    WINDOW* window;
     int width;
     int heigth;
 

@@ -8,7 +8,7 @@
 
 void initColors();
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     const int playRows = 4;
     const int playCollumns = 4;
 
@@ -17,8 +17,8 @@ int main(int argc, char **argv) {
 
     const int boardStartingRow = 2;     // y
     const int boardStartingCollumn = 1; // x
-	// pobability of new "2" appering on starup and every move
-    const unsigned char startupProbability = 6; 
+                                        // pobability of new "2" appering on starup and every move
+    const unsigned char startupProbability = 6;
     const unsigned char moveProbability = 12;
 
     bool gameIsRunning = 1;
@@ -38,17 +38,14 @@ int main(int argc, char **argv) {
     }
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
     mvprintw(tileHeigth * playRows + boardStartingRow + 1, 1, "How to play: ");
-    mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1,
-             "press 'c' to exit the game");
+    mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
     std::array<std::array<Tile, playCollumns>, playRows> board;
 
     for (int row = 0; row < playRows; row++) {
         for (int coll = 0; coll < playCollumns; coll++) {
-            board[row][coll].window = newwin(
-                tileHeigth, tileWidth, (row * tileHeigth) + boardStartingRow,
-                (coll * tileWidth) + boardStartingCollumn);
+            board[row][coll].window = newwin(tileHeigth, tileWidth, (row * tileHeigth) + boardStartingRow, (coll * tileWidth) + boardStartingCollumn);
             board[row][coll].width = tileWidth;
             board[row][coll].heigth = tileHeigth;
             board[row][coll].setValue(0, true);
@@ -57,9 +54,7 @@ int main(int argc, char **argv) {
 
             if (has_colors()) {
                 wbkgd(board[row][coll].window,
-                      COLOR_PAIR((board[row][coll].value <= 128)
-                                     ? board[row][coll].value
-                                     : 128));
+                      COLOR_PAIR((board[row][coll].value <= 128) ? board[row][coll].value : 128));
             } else {
                 box(board[row][coll].window, 0, 0);
             }
