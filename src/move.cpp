@@ -1,13 +1,13 @@
 #include "tile.h"
-#include <array>
+#include "move.h"
+#include <vector>
 #include <random>
 
 void checkAndAdd(Tile* first, Tile* second);
 void singleMove(bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
 void singleMove(bool* firstIter, Tile* mainTile, bool* wasMergedCurr); // overload for last rows
 
-template <size_t N, size_t M>
-Move::Return Move::Move(std::array<std::array<Tile, M>, N>* matrix, Move::Direction direction) {
+Move::Return Move::Move(std::vector<std::vector<Tile>>* matrix, Move::Direction direction) {
     switch (direction) {
     case Move::Direction::Up: {
         const int maxColl = matrix->at(0).size();

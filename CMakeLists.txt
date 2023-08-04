@@ -4,7 +4,7 @@ project(terminal-2048)
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 
-add_executable(terminal-2048 src/main.cpp src/tile.cpp)
+add_executable(terminal-2048 src/main.cpp src/tile.cpp src/move.cpp)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
