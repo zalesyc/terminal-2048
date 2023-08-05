@@ -42,6 +42,11 @@ int main(int argc, char** argv) {
     mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
+    int sarray[4][4] = {{2, 0, 0, 4},
+                        {2, 2, 0, 4},
+                        {0, 2, 0, 4},
+                        {0, 4, 0, 4}};
+
     std::vector<std::vector<Tile>> board(playRows, std::vector<Tile>(playCollumns));
 
     for (int row = 0; row < playRows; row++) {
@@ -50,9 +55,9 @@ int main(int argc, char** argv) {
             board[row][coll].window = newwin(tileHeigth, tileWidth, (row * tileHeigth) + boardStartingRow, (coll * tileWidth) + boardStartingCollumn);
             board[row][coll].width = tileWidth;
             board[row][coll].heigth = tileHeigth;
-            board[row][coll].setValue(0, true);
+            board[row][coll].setValue(sarray[row][coll], true);
 
-            Move::addRandTwos(&board[row][coll], startupProbability);
+            //Move::addRandTwos(&board[row][coll], startupProbability);
 
             if (has_colors()) {
                 wbkgd(board[row][coll].window,
