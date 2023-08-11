@@ -1,5 +1,6 @@
 #include "move.h"
 #include "tile.h"
+#include <algorithm>
 #include <memory>
 #include <random>
 #include <vector>
@@ -12,9 +13,10 @@ Move::Return Move::Move(std::vector<std::vector<Tile>>* matrix, Move::Direction 
     case Move::Direction::Up: {
         const int maxColl = matrix->at(0).size();
         const int maxRow = matrix->size();
+        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
 
         for (int coll = 0; coll < maxColl; coll++) {
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
+            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
             for (int stage = 0; stage < maxRow; stage++) {
                 bool firstIter = true;
                 for (int row = 0; row < maxRow; row++) {
@@ -36,9 +38,10 @@ Move::Return Move::Move(std::vector<std::vector<Tile>>* matrix, Move::Direction 
     case Move::Direction::Down: {
         const int maxColl = matrix->at(0).size();
         const int maxRow = matrix->size();
+        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
 
         for (int coll = 0; coll < maxColl; coll++) {
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
+            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
             for (int stage = 0; stage < maxRow; stage++) {
                 bool firstIter = true;
                 for (int row = maxRow - 1; row >= 0; row--) {
@@ -60,9 +63,10 @@ Move::Return Move::Move(std::vector<std::vector<Tile>>* matrix, Move::Direction 
     case Move::Direction::Left: {
         const int maxColl = matrix->at(0).size();
         const int maxRow = matrix->size();
+        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
 
         for (int row = 0; row < maxRow; row++) {
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
+            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
             for (int stage = 0; stage < maxColl; stage++) {
                 bool firstIter = true;
                 for (int coll = 0; coll < maxColl; coll++) {
@@ -84,9 +88,10 @@ Move::Return Move::Move(std::vector<std::vector<Tile>>* matrix, Move::Direction 
     case Move::Direction::Right: {
         const int maxColl = matrix->at(0).size();
         const int maxRow = matrix->size();
+        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
 
         for (int row = 0; row < maxRow; row++) {
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
+            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
             for (int stage = 0; stage < maxColl; stage++) {
                 bool firstIter = true;
                 for (int coll = maxColl - 1; coll >= 0; coll--) {
