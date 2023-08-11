@@ -1,7 +1,7 @@
-#include <array>
 #include <iostream>
 #include <ncurses.h>
 #include <string>
+#include <vector>
 
 #include "move.h"
 #include "tile.h"
@@ -41,10 +41,11 @@ int main(int argc, char** argv) {
     mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
-    std::array<std::array<Tile, playCollumns>, playRows> board;
+    std::vector<std::vector<Tile>> board(playRows, std::vector<Tile>(playCollumns));
 
     for (int row = 0; row < playRows; row++) {
         for (int coll = 0; coll < playCollumns; coll++) {
+
             board[row][coll].window = newwin(tileHeigth, tileWidth, (row * tileHeigth) + boardStartingRow, (coll * tileWidth) + boardStartingCollumn);
             board[row][coll].width = tileWidth;
             board[row][coll].heigth = tileHeigth;
