@@ -1,7 +1,6 @@
 #include <iostream>
 #include <ncurses.h>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "move.h"
