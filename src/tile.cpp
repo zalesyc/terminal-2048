@@ -32,8 +32,7 @@ std::string Tile::print(int width) {
 }
 
 void Tile::drawLabel() {
-    mvwprintw(window, std::ceil((heigth / 2.0) - 1), 1,
-              print(width - 2).c_str());
+    mvwprintw(window, std::ceil((heigth / 2.0) - 1), 1, "%s", print(width - 2).c_str());
     if (has_colors()) {
         wbkgd(window, COLOR_PAIR((value <= 128) ? value : 128));
     }
