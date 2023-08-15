@@ -9,19 +9,14 @@
 void initColors();
 
 int main(int argc, char** argv) {
-    const int playRows = 4;
+    const int playRows = 4; 
     const int playCollumns = 4;
-
-    const int tileHeigth = 3; // number of rows
-    const int tileWidth = 7;  // number of collumns
-
-    const int boardStartingRow = 2;     // y
-    const int boardStartingCollumn = 1; // x
-                                                
-    const unsigned char startupProbability = 6; // pobability of new "2" appering on starup and every move
-    const unsigned char moveProbability = 12;
-
-    const bool useColor = has_colors(); 
+    const int tileHeigth = 3; 
+    const int tileWidth = 7;  
+    const int boardStartingRow = 2;     // y, starting row on the screen
+    const int boardStartingCollumn = 1; // x, starting collumn on the screen                            
+    const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
+    const unsigned char moveProbability = 12;  // and every move
 
     bool gameIsRunning = 1;
 
@@ -29,15 +24,15 @@ int main(int argc, char** argv) {
     noecho();
     keypad(stdscr, TRUE);
 
+    const bool useColor = has_colors(); // use colors
+
     if (useColor) {
-        mvprintw(1, 1, "color");
         start_color();
         use_default_colors();
 
         initColors();
-    } else {
-        mvprintw(1, 1, "nolor");
     }
+
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
     mvprintw(tileHeigth * playRows + boardStartingRow + 1, 1, "How to play: ");
     mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1, "press 'c' to exit the game");
