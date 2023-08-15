@@ -10,117 +10,117 @@ void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMerge
 
 Move::Return Move::Move(std::vector<std::vector<Tile>>* matrix, Move::Direction direction) {
     switch (direction) {
-    case Move::Direction::Up: {
-        const int maxColl = matrix->at(0).size();
-        const int maxRow = matrix->size();
-        bool anyMoved = false;
-        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
+        case Move::Direction::Up: {
+            const int maxColl = matrix->at(0).size();
+            const int maxRow = matrix->size();
+            bool anyMoved = false;
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
 
-        for (int coll = 0; coll < maxColl; coll++) {
-            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
-            for (int stage = 0; stage < maxRow; stage++) {
-                bool firstIter = true;
-                for (int row = 0; row < maxRow; row++) {
-                    if (row < maxRow - 1) {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[row],
-                                       &matrix->at(row + 1).at(coll),
-                                       &alreadyMergedTiles[row + 1]);
-                    } else {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[row]);
+            for (int coll = 0; coll < maxColl; coll++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
+                for (int stage = 0; stage < maxRow; stage++) {
+                    bool firstIter = true;
+                    for (int row = 0; row < maxRow; row++) {
+                        if (row < maxRow - 1) {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[row],
+                                           &matrix->at(row + 1).at(coll),
+                                           &alreadyMergedTiles[row + 1]);
+                        } else {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[row]);
+                        }
                     }
                 }
             }
+            return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
         }
-        return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
-    }
 
-    case Move::Direction::Down: {
-        const int maxColl = matrix->at(0).size();
-        const int maxRow = matrix->size();
-        bool anyMoved = false;
-        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
+        case Move::Direction::Down: {
+            const int maxColl = matrix->at(0).size();
+            const int maxRow = matrix->size();
+            bool anyMoved = false;
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
 
-        for (int coll = 0; coll < maxColl; coll++) {
-            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
-            for (int stage = 0; stage < maxRow; stage++) {
-                bool firstIter = true;
-                for (int row = maxRow - 1; row >= 0; row--) {
-                    if (row > 0) {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[row],
-                                       &matrix->at(row - 1).at(coll),
-                                       &alreadyMergedTiles[row - 1]);
-                    } else {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[row]);
+            for (int coll = 0; coll < maxColl; coll++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
+                for (int stage = 0; stage < maxRow; stage++) {
+                    bool firstIter = true;
+                    for (int row = maxRow - 1; row >= 0; row--) {
+                        if (row > 0) {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[row],
+                                           &matrix->at(row - 1).at(coll),
+                                           &alreadyMergedTiles[row - 1]);
+                        } else {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[row]);
+                        }
                     }
                 }
             }
+            return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
         }
-        return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
-    }
 
-    case Move::Direction::Left: {
-        const int maxColl = matrix->at(0).size();
-        const int maxRow = matrix->size();
-        bool anyMoved = false;
-        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
+        case Move::Direction::Left: {
+            const int maxColl = matrix->at(0).size();
+            const int maxRow = matrix->size();
+            bool anyMoved = false;
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
 
-        for (int row = 0; row < maxRow; row++) {
-            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
-            for (int stage = 0; stage < maxColl; stage++) {
-                bool firstIter = true;
-                for (int coll = 0; coll < maxColl; coll++) {
-                    if (coll < maxColl - 1) {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[coll],
-                                       &matrix->at(row).at(coll + 1),
-                                       &alreadyMergedTiles[coll + 1]);
-                    } else {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[coll]);
+            for (int row = 0; row < maxRow; row++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
+                for (int stage = 0; stage < maxColl; stage++) {
+                    bool firstIter = true;
+                    for (int coll = 0; coll < maxColl; coll++) {
+                        if (coll < maxColl - 1) {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[coll],
+                                           &matrix->at(row).at(coll + 1),
+                                           &alreadyMergedTiles[coll + 1]);
+                        } else {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[coll]);
+                        }
                     }
                 }
             }
+            return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
         }
-        return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
-    }
 
-    case Move::Direction::Right: {
-        const int maxColl = matrix->at(0).size();
-        const int maxRow = matrix->size();
-        bool anyMoved = false;
-        std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
+        case Move::Direction::Right: {
+            const int maxColl = matrix->at(0).size();
+            const int maxRow = matrix->size();
+            bool anyMoved = false;
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
 
-        for (int row = 0; row < maxRow; row++) {
-            std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
-            for (int stage = 0; stage < maxColl; stage++) {
-                bool firstIter = true;
-                for (int coll = maxColl - 1; coll >= 0; coll--) {
-                    if (coll > 0) {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[coll],
-                                       &matrix->at(row).at(coll - 1),
-                                       &alreadyMergedTiles[coll - 1]);
-                    } else {
-                        singleTileMove(&anyMoved,
-                                       &firstIter, &matrix->at(row).at(coll),
-                                       &alreadyMergedTiles[coll]);
+            for (int row = 0; row < maxRow; row++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
+                for (int stage = 0; stage < maxColl; stage++) {
+                    bool firstIter = true;
+                    for (int coll = maxColl - 1; coll >= 0; coll--) {
+                        if (coll > 0) {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[coll],
+                                           &matrix->at(row).at(coll - 1),
+                                           &alreadyMergedTiles[coll - 1]);
+                        } else {
+                            singleTileMove(&anyMoved,
+                                           &firstIter, &matrix->at(row).at(coll),
+                                           &alreadyMergedTiles[coll]);
+                        }
                     }
                 }
             }
+            return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
         }
-        return (anyMoved) ? Move::Return::Ok : Move::Return::NoneMoved;
-    }
     }
     return Move::Return::NoneMoved;
 }

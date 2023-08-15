@@ -70,36 +70,36 @@ int main(int argc, char** argv) {
         int action = getch();
         Move::Return returnMsg;
         switch (action) {
-        case (int)'c':
-        case (int)'C':
-            gameIsRunning = 0;
-            endwin();
-            return 0;
-            break;
+            case (int)'c':
+            case (int)'C':
+                gameIsRunning = 0;
+                endwin();
+                return 0;
+                break;
 
-        case KEY_UP:
-        case (char)'w':
-            mvprintw(1, 1, "up   ");
-            returnMsg = Move::Move(&board, Move::Direction::Up);
-            break;
+            case KEY_UP:
+            case (char)'w':
+                mvprintw(1, 1, "up   ");
+                returnMsg = Move::Move(&board, Move::Direction::Up);
+                break;
 
-        case KEY_DOWN:
-        case (char)'s':
-            mvprintw(1, 1, "down ");
-            returnMsg = Move::Move(&board, Move::Direction::Down);
-            break;
+            case KEY_DOWN:
+            case (char)'s':
+                mvprintw(1, 1, "down ");
+                returnMsg = Move::Move(&board, Move::Direction::Down);
+                break;
 
-        case KEY_RIGHT:
-        case (char)'d':
-            mvprintw(1, 1, "right");
-            returnMsg = Move::Move(&board, Move::Direction::Right);
-            break;
+            case KEY_RIGHT:
+            case (char)'d':
+                mvprintw(1, 1, "right");
+                returnMsg = Move::Move(&board, Move::Direction::Right);
+                break;
 
-        case KEY_LEFT:
-        case (char)'a':
-            mvprintw(1, 1, "left ");
-            returnMsg = Move::Move(&board, Move::Direction::Left);
-            break;
+            case KEY_LEFT:
+            case (char)'a':
+                mvprintw(1, 1, "left ");
+                returnMsg = Move::Move(&board, Move::Direction::Left);
+                break;
         }
         if (returnMsg == Move::Return::Ok) {
             for (int row = 0; row < board.size(); row++) {

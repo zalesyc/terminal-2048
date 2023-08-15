@@ -4,5 +4,5 @@ IndentWidth: 4
 PointerAlignment: Left
 ColumnLimit: 0
 BreakBeforeTernaryOperators: false
-
+IndentCaseLabels: true
 ...
