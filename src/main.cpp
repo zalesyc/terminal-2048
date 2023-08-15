@@ -17,9 +17,11 @@ int main(int argc, char** argv) {
 
     const int boardStartingRow = 2;     // y
     const int boardStartingCollumn = 1; // x
-                                        // pobability of new "2" appering on starup and every move
-    const unsigned char startupProbability = 6;
+                                                
+    const unsigned char startupProbability = 6; // pobability of new "2" appering on starup and every move
     const unsigned char moveProbability = 12;
+
+    const bool useColor = has_colors(); 
 
     bool gameIsRunning = 1;
 
@@ -27,7 +29,7 @@ int main(int argc, char** argv) {
     noecho();
     keypad(stdscr, TRUE);
 
-    if (has_colors() == true) {
+    if (useColor) {
         mvprintw(1, 1, "color");
         start_color();
         use_default_colors();
@@ -53,7 +55,7 @@ int main(int argc, char** argv) {
 
             Move::addRandTwos(&board[row][coll], startupProbability);
 
-            if (has_colors()) {
+            if (useColor) {
                 wbkgd(board[row][coll].window,
                       COLOR_PAIR((board[row][coll].value <= 128) ? board[row][coll].value : 128));
             } else {
