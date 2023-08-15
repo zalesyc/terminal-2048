@@ -8,8 +8,10 @@ enum Direction { Left,
                  Right,
                  Up,
                  Down };
-enum Return { Ok = 0,
-              GameLost = 1 };
+enum Return { Ok,
+              NoneMoved,
+              GameLost };
+
 void addRandTwos(Tile* tile, unsigned char probability);
 
 Return Move(std::vector<std::vector<Tile>>* matrix, Direction direction);

@@ -101,10 +101,11 @@ int main(int argc, char** argv) {
             returnMsg = Move::Move(&board, Move::Direction::Left);
             break;
         }
-
-        for (int row = 0; row < board.size(); row++) {
-            for (int coll = 0; coll < board.at(row).size(); coll++) {
-                Move::addRandTwos(&board.at(row).at(coll), moveProbability);
+        if (returnMsg == Move::Return::Ok) {
+            for (int row = 0; row < board.size(); row++) {
+                for (int coll = 0; coll < board.at(row).size(); coll++) {
+                    Move::addRandTwos(&board.at(row).at(coll), moveProbability);
+                }
             }
         }
         refresh();
