@@ -27,8 +27,10 @@ int main(int argc, const char* argv[]) {
     // commandline arguments
     argumentParser argParser(argc, argv);
 
-    argParser.setIntToOption("-r", &playRows, {3, 100});
-    argParser.setIntToOption("-c", &playCollumns, {3, 100});
+    if (!argParser.setIntToOption("-r", &playRows, {3, 100}))
+        return 0;
+    if (!argParser.setIntToOption("-c", &playCollumns, {3, 100}))
+        return 0;
 
     // ncurses initialization
     initscr();

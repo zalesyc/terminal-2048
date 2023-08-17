@@ -16,11 +16,20 @@ argumentParser::argumentParser(int argc, char const* argv[]) {
     // else error - no args provided
 }
 
-std::string argumentParser::getOption(const std::string option) {
+std::pair<bool, std::string> argumentParser::getOption(const std::string option) {
     std::vector<std::string>::iterator itr;
     itr = std::find(m_args.begin(), m_args.end(), option);
 
-    return (itr != m_args.end() && ++itr != m_args.end()) ? *itr : "";
+    // return (itr != m_args.end() && ++itr != m_args.end()) ? *itr : "";
+    if (itr == m_args.end()) {
+        return std::make_pair(false, "");
+    }
+
+    if (++itr == m_args.end()) {
+        return std::make_pair(true, "");
+    }
+
+    return std::make_pair(true, *itr);
 }
 
 bool argumentParser::optionExists(const std::string option) {
@@ -28,21 +37,27 @@ bool argumentParser::optionExists(const std::string option) {
 }
 
 bool argumentParser::setIntToOption(const std::string option, int* variableToBeSet, const std::pair<int, int> range) {
-    std::string argument = this->getOption(option);
-    if (argument.empty()) {
-        std::cout << "Unexpected agument: \n missing number parameter after the " << option << " option" << std::endl;
+    std::pair<bool, std::string> argument = this->getOption(option);
+
+    if (!argument.first) {
+        return true;
+    }
+
+    if (argument.second.empty()) {
+        std::cout << "Unexpected agument: \nMissing number parameter after the " << option << " option" << std::endl;
         return false;
     }
 
-    if (!this->isNumber(argument)) {
-        std::cout << "Unexpected agument: \n agument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
+    if (!this->isNumber(argument.second)) {
+        std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
         return false;
     }
 
-    int intArgument = std::stoi(argument);
+    int intArgument = std::stoi(argument.second);
     std::cout << range.first << ", " << range.second << ", " << intArgument << std::endl;
+
     if (intArgument < range.first || intArgument > range.second) {
-        std::cout << "Unexpected agument: \n agument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
+        std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
         return false;
     }
 
