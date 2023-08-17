@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ncurses.h>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "argumentParser.h"
@@ -11,9 +12,11 @@ void initColors();
 
 int main(int argc, const char* argv[]) {
     // variables initialization
-    int playRows;
-    int playCollumns;
+    // those  non-const varables can be changed using commandline arguments, so this assigment set the defaluts
+    int playRows = 4;
+    int playCollumns = 4;
     bool useColor;
+
     const int tileHeigth = 3;
     const int tileWidth = 7;
     const int boardStartingRow = 2;             // y, starting row on the screen
@@ -21,30 +24,16 @@ int main(int argc, const char* argv[]) {
     const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
     const unsigned char moveProbability = 12;   // and every move
 
+    // commandline arguments
+    argumentParser argParser(argc, argv);
+
+    argParser.setIntToOption("-r", &playRows, {3, 100});
+    argParser.setIntToOption("-c", &playCollumns, {3, 100});
+
     // ncurses initialization
     initscr();
     noecho();
     keypad(stdscr, TRUE);
-
-    // commandline arguments
-    argumentParser argParser(argc, argv);
-
-    { // these brackets are used to create scope, so argument is deleted on the end
-        std::string argument = argParser.getOption("-r");
-        if (!argument.empty()) {
-            playRows = std::stoi(argument); // TODO: check if argument is number, else throw error and exit
-        } else {
-            playRows = 4;
-        }
-    }
-    {
-        std::string argument = argParser.getOption("-c");
-        if (!argument.empty()) {
-            playCollumns = std::stoi(argument);
-        } else {
-            playCollumns = 4;
-        }
-    }
 
     if (argParser.optionExists("--no-color")) {
         useColor = false;
