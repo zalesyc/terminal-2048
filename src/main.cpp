@@ -3,14 +3,17 @@
 #include <string>
 #include <vector>
 
+#include "argumentParser.h"
 #include "move.h"
 #include "tile.h"
 
 void initColors();
 
-int main(int argc, char** argv) {
-    const int playRows = 4;
-    const int playCollumns = 4;
+int main(int argc, const char* argv[]) {
+    // variables initialization
+    int playRows;
+    int playCollumns;
+    bool useColor;
     const int tileHeigth = 3;
     const int tileWidth = 7;
     const int boardStartingRow = 2;             // y, starting row on the screen
@@ -18,14 +21,38 @@ int main(int argc, char** argv) {
     const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
     const unsigned char moveProbability = 12;   // and every move
 
-    bool gameIsRunning = 1;
-
+    // ncurses initialization
     initscr();
     noecho();
     keypad(stdscr, TRUE);
 
-    const bool useColor = has_colors(); // use colors
+    // commandline arguments
+    argumentParser argParser(argc, argv);
 
+    { // these brackets are used to create scope, so argument is deleted on the end
+        std::string argument = argParser.getOption("-r");
+        if (!argument.empty()) {
+            playRows = std::stoi(argument); // TODO: check if argument is number, else throw error and exit
+        } else {
+            playRows = 4;
+        }
+    }
+    {
+        std::string argument = argParser.getOption("-c");
+        if (!argument.empty()) {
+            playCollumns = std::stoi(argument);
+        } else {
+            playCollumns = 4;
+        }
+    }
+
+    if (argParser.optionExists("--no-color")) {
+        useColor = false;
+    } else {
+        useColor = has_colors();
+    }
+
+    // terminal color init
     if (useColor) {
         start_color();
         use_default_colors();
@@ -62,6 +89,7 @@ int main(int argc, char** argv) {
     }
     refresh();
 
+    bool gameIsRunning = 1;
     while (gameIsRunning) // game loop
     {
         int action = getch();
