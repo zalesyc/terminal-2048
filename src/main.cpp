@@ -15,10 +15,10 @@ int main(int argc, const char* argv[]) {
     // those  non-const varables can be changed using commandline arguments, so this assigment set the defaluts
     int playRows = 4;
     int playCollumns = 4;
+    int tileHeigth = 3;
+    int tileWidth = 7;
     bool useColor;
 
-    const int tileHeigth = 3;
-    const int tileWidth = 7;
     const int boardStartingRow = 2;             // y, starting row on the screen
     const int boardStartingCollumn = 1;         // x, starting collumn on the screen
     const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
@@ -29,7 +29,15 @@ int main(int argc, const char* argv[]) {
 
     if (!argParser.setIntToOption("-r", &playRows, {3, 100}))
         return 0;
+    if (!argParser.setIntToOption("--rows", &playRows, {3, 100}))
+        return 0;
     if (!argParser.setIntToOption("-c", &playCollumns, {3, 100}))
+        return 0;
+    if (!argParser.setIntToOption("--columns", &playCollumns, {3, 100}))
+        return 0;
+    if (!argParser.setIntToOption("--tile-width", &tileWidth, {5, 15}))
+        return 0;
+    if (!argParser.setIntToOption("--tile-height", &tileHeigth, {3, 10}))
         return 0;
 
     // ncurses initialization
