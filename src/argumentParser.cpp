@@ -30,19 +30,19 @@ bool argumentParser::optionExists(const std::string option) {
 bool argumentParser::setIntToOption(const std::string option, int* variableToBeSet, const std::pair<int, int> range) {
     std::string argument = this->getOption(option);
     if (argument.empty()) {
-        // print error
+        std::cout << "Unexpected agument: \n missing number parameter after the " << option << " option" << std::endl;
         return false;
     }
 
     if (!this->isNumber(argument)) {
-        // print error
+        std::cout << "Unexpected agument: \n agument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
         return false;
     }
 
     int intArgument = std::stoi(argument);
     std::cout << range.first << ", " << range.second << ", " << intArgument << std::endl;
     if (intArgument < range.first || intArgument > range.second) {
-        // print error
+        std::cout << "Unexpected agument: \n agument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
         return false;
     }
 
