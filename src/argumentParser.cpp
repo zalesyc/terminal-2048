@@ -54,8 +54,7 @@ bool argumentParser::setIntToOption(const std::string option, int* variableToBeS
     }
 
     int intArgument = std::stoi(argument.second);
-    std::cout << range.first << ", " << range.second << ", " << intArgument << std::endl;
-
+    
     if (intArgument < range.first || intArgument > range.second) {
         std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
         return false;
