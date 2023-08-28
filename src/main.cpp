@@ -7,37 +7,38 @@
 #include "argumentParser.h"
 #include "move.h"
 #include "tile.h"
+#include "app.h"
 
 void initColors();
 
 int main(int argc, const char* argv[]) {
     // variables initialization
     // those  non-const varables can be changed using commandline arguments, so this assigment set the defaluts
-    int playRows = 4;
-    int playCollumns = 4;
-    int tileHeigth = 3;
-    int tileWidth = 7;
-    bool useColor;
-
-    const int boardStartingRow = 2;             // y, starting row on the screen
-    const int boardStartingCollumn = 1;         // x, starting collumn on the screen
-    const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
-    const unsigned char moveProbability = 12;   // and every move
+    App app;
+    app.playRows = 4;
+    app.playCollumns = 4;
+    app.tileHeigth = 3;
+    app.tileWidth = 7;
+    /*
+    const int app.boardStartingRow = 2;             // y, starting row on the screen
+    const int app.boardStartingCollumn = 1;         // x, starting collumn on the screen
+    const unsigned char app.startupProbability = 6; // pobability of new "2" appering on starup
+    const unsigned char app.moveProbability = 12;   // and every move */
 
     // commandline arguments
     argumentParser argParser(argc, argv); // I cannot declare it in the if statement, because it is a different scope
     if (argc > 1) {
-        if (!argParser.setIntToOption("-r", &playRows, {3, 100}))
+        if (!argParser.setIntToOption("-r", &app.playRows, {3, 100}))
             return 0;
-        if (!argParser.setIntToOption("--rows", &playRows, {3, 100}))
+        if (!argParser.setIntToOption("--rows", &app.playRows, {3, 100}))
             return 0;
-        if (!argParser.setIntToOption("-c", &playCollumns, {3, 100}))
+        if (!argParser.setIntToOption("-c", &app.playCollumns, {3, 100}))
             return 0;
-        if (!argParser.setIntToOption("--columns", &playCollumns, {3, 100}))
+        if (!argParser.setIntToOption("--columns", &app.playCollumns, {3, 100}))
             return 0;
-        if (!argParser.setIntToOption("--tile-width", &tileWidth, {5, 15}))
+        if (!argParser.setIntToOption("--tile-width", &app.tileWidth, {5, 15}))
             return 0;
-        if (!argParser.setIntToOption("--tile-height", &tileHeigth, {3, 10}))
+        if (!argParser.setIntToOption("--tile-height", &app.tileHeigth, {3, 10}))
             return 0;
 
         if (argParser.optionExists("--help")) {
@@ -57,13 +58,13 @@ int main(int argc, const char* argv[]) {
     keypad(stdscr, TRUE);
 
     if (argc > 0 && argParser.optionExists("--no-color")) {
-        useColor = false;
+        app.useColor = false;
     } else {
-        useColor = has_colors();
+        app.useColor = has_colors();
     }
 
     // terminal color init
-    if (useColor) {
+    if (app.useColor) {
         start_color();
         use_default_colors();
 
@@ -71,25 +72,23 @@ int main(int argc, const char* argv[]) {
     }
 
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
-    mvprintw(tileHeigth * playRows + boardStartingRow + 1, 1, "How to play: ");
-    mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1, "press 'c' to exit the game");
+    mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 1, 1, "How to play: ");
+    mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
-    
+    std::vector<std::vector<Tile>> board(app.playRows, std::vector<Tile>(app.playCollumns));
 
-    std::vector<std::vector<Tile>> board(playRows, std::vector<Tile>(playCollumns));
+    for (int row = 0; row < app.playRows; row++) {
+        for (int coll = 0; coll < app.playCollumns; coll++) {
 
-    for (int row = 0; row < playRows; row++) {
-        for (int coll = 0; coll < playCollumns; coll++) {
-
-            board[row][coll].window = newwin(tileHeigth, tileWidth, (row * tileHeigth) + boardStartingRow, (coll * tileWidth) + boardStartingCollumn);
-            board[row][coll].width = tileWidth;
-            board[row][coll].heigth = tileHeigth;
+            board[row][coll].window = newwin(app.tileHeigth, app.tileWidth, (row * app.tileHeigth) + app.boardStartingRow, (coll * app.tileWidth) + app.boardStartingCollumn);
+            board[row][coll].width = app.tileWidth;
+            board[row][coll].heigth = app.tileHeigth;
             board[row][coll].setValue(0, true);
 
-            Move::addRandTwos(&board[row][coll], startupProbability);
+            Move::addRandTwos(&board[row][coll], app.startupProbability);
 
-            if (useColor) {
+            if (app.useColor) {
                 wbkgd(board[row][coll].window,
                       COLOR_PAIR((board[row][coll].value <= 128) ? board[row][coll].value : 128));
             } else {
