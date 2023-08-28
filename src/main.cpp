@@ -85,7 +85,7 @@ int main(int argc, const char* argv[]) {
             board[row][coll].heigth = tileHeigth;
             board[row][coll].setValue(0, true);
 
-            Move::addRandTwos(&board[row][coll], startupProbability);
+             Move::addRandTwos(&board[row][coll], startupProbability);
 
             if (useColor) {
                 wbkgd(board[row][coll].window,
@@ -136,10 +136,40 @@ int main(int argc, const char* argv[]) {
                 returnMsg = Move::Move(&board, Move::Direction::Left);
                 break;
         }
+
         if (returnMsg == Move::Return::Ok) {
+            bool noZero = true;
             for (int row = 0; row < board.size(); row++) {
                 for (int coll = 0; coll < board.at(row).size(); coll++) {
                     Move::addRandTwos(&board.at(row).at(coll), moveProbability);
+                    if (board.at(row).at(coll).value == 0) {
+                        noZero = false;
+                    }
+                }
+            }
+
+            if (noZero) {
+                bool end = true;
+                for (int row = 0; row < board.size(); row++) {
+                    for (int coll = 0; coll < board.at(row).size(); coll++) {
+                        if (coll != board.at(row).size() - 1 && board.at(row).at(coll + 1).value == board.at(row).at(coll).value) {
+                            end = false;
+                        } else if (coll != 0 && board.at(row).at(coll - 1).value == board.at(row).at(coll).value) {
+                            end = false;
+                        } else if (row != board.size() - 1 && board.at(row + 1).at(coll).value == board.at(row).at(coll).value) {
+                            end = false;
+                        } else if (row != 0 && board.at(row - 1).at(coll).value == board.at(row).at(coll).value) {
+                            end = false;
+                        }
+                    }
+                }
+
+                if (end) {
+                    mvprintw(1, 1, "end !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    getch();
+                    endwin();
+                    std::cout << "end" << std::endl;
+                    return 0;
                 }
             }
         }
