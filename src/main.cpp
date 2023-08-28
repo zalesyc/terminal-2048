@@ -75,6 +75,8 @@ int main(int argc, const char* argv[]) {
     mvprintw(tileHeigth * playRows + boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
+    
+
     std::vector<std::vector<Tile>> board(playRows, std::vector<Tile>(playCollumns));
 
     for (int row = 0; row < playRows; row++) {
@@ -85,7 +87,7 @@ int main(int argc, const char* argv[]) {
             board[row][coll].heigth = tileHeigth;
             board[row][coll].setValue(0, true);
 
-             Move::addRandTwos(&board[row][coll], startupProbability);
+            Move::addRandTwos(&board[row][coll], startupProbability);
 
             if (useColor) {
                 wbkgd(board[row][coll].window,
@@ -139,10 +141,11 @@ int main(int argc, const char* argv[]) {
 
         if (returnMsg == Move::Return::Ok) {
             bool noZero = true;
-            for (int row = 0; row < board.size(); row++) {
-                for (int coll = 0; coll < board.at(row).size(); coll++) {
-                    Move::addRandTwos(&board.at(row).at(coll), moveProbability);
-                    if (board.at(row).at(coll).value == 0) {
+
+            for (auto& row : board) {
+                for (Tile& tile : row) {
+                    Move::addRandTwos(&tile, moveProbability);
+                    if (tile.value == 0) {
                         noZero = false;
                     }
                 }
