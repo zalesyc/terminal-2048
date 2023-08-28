@@ -143,7 +143,7 @@ int main(int argc, const char* argv[]) {
 
             for (auto& row : board) {
                 for (Tile& tile : row) {
-                    Move::addRandTwos(&tile, moveProbability);
+                    Move::addRandTwos(&tile, app.moveProbability);
                     if (tile.value == 0) {
                         noZero = false;
                     }
