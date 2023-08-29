@@ -8,6 +8,7 @@
 #include "move.h"
 #include "tile.h"
 #include "app.h"
+#include "popup.h"
 
 void initColors();
 
