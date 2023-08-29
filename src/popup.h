@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "app.h"
+#include "game.h"
 #include "tile.h"
 
 class Popup {

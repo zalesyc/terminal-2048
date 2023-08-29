@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#include "app.h"
+#include "game.h"
 #include "argumentParser.h"
 #include "move.h"
 #include "popup.h"
@@ -14,17 +14,7 @@ void initColors();
 
 int main(int argc, const char* argv[]) {
     // variables initialization
-    // those  non-const varables can be changed using commandline arguments, so this assigment set the defaluts
     App app;
-    app.playRows = 4;
-    app.playCollumns = 4;
-    app.tileHeigth = 3;
-    app.tileWidth = 7;
-    /*
-    const int app.boardStartingRow = 2;             // y, starting row on the screen
-    const int app.boardStartingCollumn = 1;         // x, starting collumn on the screen
-    const unsigned char app.startupProbability = 6; // pobability of new "2" appering on starup
-    const unsigned char app.moveProbability = 12;   // and every move */
 
     // commandline arguments
     argumentParser argParser(argc, argv); // I cannot declare it in the if statement, because it is a different scope
