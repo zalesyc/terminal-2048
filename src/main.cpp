@@ -67,28 +67,9 @@ int main(int argc, const char* argv[]) {
     refresh();
 
     std::vector<std::vector<Tile>> board(app.playRows, std::vector<Tile>(app.playCollumns));
+    boardInit(&board, &app);
 
-    for (int row = 0; row < app.playRows; row++) {
-        for (int coll = 0; coll < app.playCollumns; coll++) {
-
-            board[row][coll].window = newwin(app.tileHeigth, app.tileWidth, (row * app.tileHeigth) + app.boardStartingRow, (coll * app.tileWidth) + app.boardStartingCollumn);
-            board[row][coll].width = app.tileWidth;
-            board[row][coll].heigth = app.tileHeigth;
-            board[row][coll].setValue(0, true);
-
-            addRandTwos(&board[row][coll], app.startupProbability);
-
-            if (app.useColor) {
-                wbkgd(board[row][coll].window,
-                      COLOR_PAIR((board[row][coll].value <= 128) ? board[row][coll].value : 128));
-            } else {
-                box(board[row][coll].window, 0, 0);
-            }
-
-            wrefresh(board[row][coll].window);
-        }
-    }
-    refresh();
+    // end of inits
 
     bool gameIsRunning = 1;
     while (gameIsRunning) // game loop

@@ -18,5 +18,6 @@ struct App { // defalut options, non const variables may be overwritten
 
 void colors();
 void addRandTwos(Tile* tile, unsigned char probability);
+void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig);
 
 #endif // APP_H
