@@ -10,8 +10,6 @@
 #include "popup.h"
 #include "tile.h"
 
-void initColors();
-
 int main(int argc, const char* argv[]) {
     // variables initialization
     App app;
@@ -59,7 +57,7 @@ int main(int argc, const char* argv[]) {
         start_color();
         use_default_colors();
 
-        initColors();
+        colors();
     }
 
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
@@ -181,14 +179,4 @@ int main(int argc, const char* argv[]) {
 
     endwin();
     return 0;
-}
-
-void initColors() {
-    init_pair(2, -1, COLOR_WHITE);
-    init_pair(4, -1, COLOR_YELLOW);
-    init_pair(8, -1, COLOR_GREEN);
-    init_pair(16, -1, COLOR_CYAN);
-    init_pair(32, -1, COLOR_BLUE);
-    init_pair(64, -1, COLOR_MAGENTA);
-    init_pair(128, -1, COLOR_RED);
 }

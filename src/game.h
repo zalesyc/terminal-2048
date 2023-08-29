@@ -14,4 +14,6 @@ struct App { // defalut options, non const variables may be overwritten
     const unsigned char moveProbability = 12;   // and every move
 };
 
+void colors();
+
 #endif // APP_H
