@@ -1,6 +1,6 @@
 #include "popup.h"
-#include "tile.h"
 #include "game.h"
+#include "tile.h"
 #include <cmath>
 #include <string>
 #include <vector>

@@ -2,7 +2,6 @@
 #include "tile.h"
 #include <algorithm>
 #include <memory>
-#include <random>
 #include <vector>
 
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
@@ -146,17 +145,5 @@ void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMerge
     if (mainTile->value == 0 || !(*firstIter)) {
         *firstIter = false;
         mainTile->setValue(0);
-    }
-}
-
-void Move::addRandTwos(Tile* tile, unsigned char probability) {
-    // probability is the chance of showing new 2 on every move
-    if (tile->value == 0) {
-        std::random_device r;
-        std::default_random_engine eng(r());
-        std::uniform_int_distribution<int> uniform_dist(1, probability);
-        if (uniform_dist(eng) == 1) {
-            tile->setValue(2, true);
-        }
     }
 }

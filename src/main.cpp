@@ -4,8 +4,8 @@
 #include <utility>
 #include <vector>
 
-#include "game.h"
 #include "argumentParser.h"
+#include "game.h"
 #include "move.h"
 #include "popup.h"
 #include "tile.h"
@@ -41,6 +41,7 @@ int main(int argc, const char* argv[]) {
             return 0;
         }
     }
+
     // ncurses initialization
     initscr();
     noecho();
@@ -75,7 +76,7 @@ int main(int argc, const char* argv[]) {
             board[row][coll].heigth = app.tileHeigth;
             board[row][coll].setValue(0, true);
 
-            Move::addRandTwos(&board[row][coll], app.startupProbability);
+            addRandTwos(&board[row][coll], app.startupProbability);
 
             if (app.useColor) {
                 wbkgd(board[row][coll].window,
@@ -132,7 +133,7 @@ int main(int argc, const char* argv[]) {
 
             for (auto& row : board) {
                 for (Tile& tile : row) {
-                    Move::addRandTwos(&tile, app.moveProbability);
+                    addRandTwos(&tile, app.moveProbability);
                     if (tile.value == 0) {
                         noZero = false;
                     } else if (tile.value == 2048) {

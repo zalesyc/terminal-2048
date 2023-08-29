@@ -12,8 +12,6 @@ enum Return { Ok,
               NoneMoved,
               GameLost };
 
-void addRandTwos(Tile* tile, unsigned char probability);
-
 Return Move(std::vector<std::vector<Tile>>* matrix, Direction direction);
 
 } // namespace Move

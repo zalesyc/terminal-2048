@@ -1,6 +1,8 @@
 #ifndef APP_H
 #define APP_H
 
+#include "tile.h"
+
 struct App { // defalut options, non const variables may be overwritten
     int playRows = 4;
     int playCollumns = 4;
@@ -15,5 +17,6 @@ struct App { // defalut options, non const variables may be overwritten
 };
 
 void colors();
+void addRandTwos(Tile* tile, unsigned char probability);
 
 #endif // APP_H
