@@ -13,10 +13,10 @@ class Tile {
     int value;
     void setValue(int newValue);
     void setValue(int newValue, bool redraw);
+    void drawLabel();
 
   private:
     std::string print(int width);
-    void drawLabel();
 };
 
 #endif
