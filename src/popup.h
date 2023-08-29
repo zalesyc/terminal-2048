@@ -8,17 +8,17 @@
 #include "app.h"
 #include "tile.h"
 
-class Popup 
-{
-public:
+class Popup {
+  public:
     Popup(App* appconfig, std::vector<std::vector<Tile>>* board, int height, int width);
     ~Popup();
-    
+
     void setText(std::string text);
 
-private: 
+  private:
     std::string print(int width);
-private:
+
+  private:
     WINDOW* m_win;
     std::string m_text;
     App* m_appconfig;

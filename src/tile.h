@@ -17,7 +17,6 @@ class Tile {
 
   private:
     std::string print(int width);
-    
 };
 
 #endif

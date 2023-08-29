@@ -4,11 +4,11 @@
 #include <utility>
 #include <vector>
 
+#include "app.h"
 #include "argumentParser.h"
 #include "move.h"
-#include "tile.h"
-#include "app.h"
 #include "popup.h"
+#include "tile.h"
 
 void initColors();
 
@@ -147,6 +147,13 @@ int main(int argc, const char* argv[]) {
                     Move::addRandTwos(&tile, app.moveProbability);
                     if (tile.value == 0) {
                         noZero = false;
+                    } else if (tile.value == 2056) {
+                        Popup winPopup(&app, &board, 5, 15);
+                        winPopup.setText("YOU WON !");
+                        getch();
+                        endwin();
+                        std::cout << "win" << std::endl;
+                        return 0;
                     }
                 }
             }
@@ -168,7 +175,8 @@ int main(int argc, const char* argv[]) {
                 }
 
                 if (end) {
-                    mvprintw(1, 1, "end !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Popup lostPopup(&app, &board, 5, 15);
+                    lostPopup.setText("YOU LOST !");
                     getch();
                     endwin();
                     std::cout << "end" << std::endl;
