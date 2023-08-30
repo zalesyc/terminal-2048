@@ -119,7 +119,7 @@ int main(int argc, const char* argv[]) {
                         noZero = false;
                     } else if (tile.value == 2048) {
                         {
-                            Popup winPopup(&app, &board, 5, 15);
+                            Popup winPopup(&app, &board);
                             winPopup.setText("YOU WON !");
                             getch();
                         }
@@ -147,7 +147,7 @@ int main(int argc, const char* argv[]) {
 
                 if (end) {
                     {
-                        Popup lostPopup(&app, &board, 5, 15);
+                        Popup lostPopup(&app, &board);
                         lostPopup.setText("YOU LOST !");
                         getch();
                     }

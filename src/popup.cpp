@@ -2,15 +2,24 @@
 #include "game.h"
 #include "tile.h"
 #include <cmath>
+#include <iostream>
 #include <string>
 #include <vector>
 
-Popup::Popup(App* appconfig, std::vector<std::vector<Tile>>* board, int height, int width) {
+Popup::Popup(App* appconfig, std::vector<std::vector<Tile>>* board) {
     m_appconfig = appconfig;
     m_board = board;
-    m_winWidth = width;
-    m_winHeight = height;
-    m_win = newwin(height, width, m_appconfig->boardStartingRow + ((m_appconfig->playRows * m_appconfig->tileHeigth) / 2) - (height / 2), m_appconfig->boardStartingCollumn + ((m_appconfig->playCollumns * m_appconfig->tileWidth) / 2) - (width / 2));
+    // calculating the size and position of the popup
+    const int rowMargin = m_appconfig->tileHeigth * ((appconfig->playRows > 6) ? 2 : 0.5);
+    const int colMargin = m_appconfig->tileWidth * ((appconfig->playCollumns > 6) ? 2 : 0.5);
+    const int topLeftX = m_appconfig->boardStartingCollumn + colMargin;
+    const int topLeftY = m_appconfig->boardStartingRow + rowMargin;
+    const int bottomRightX = m_appconfig->boardStartingCollumn + (m_appconfig->playCollumns * m_appconfig->tileWidth) - colMargin;
+    const int bottomRightY = m_appconfig->boardStartingRow + (m_appconfig->playRows * m_appconfig->tileHeigth) - rowMargin;
+    m_winWidth = bottomRightX - topLeftX;
+    m_winHeight = bottomRightY - topLeftY;
+
+    m_win = newwin(m_winHeight, m_winWidth, topLeftY, topLeftX);
     box(m_win, 0, 0);
     wrefresh(m_win);
 }

@@ -10,7 +10,7 @@
 
 class Popup {
   public:
-    Popup(App* appconfig, std::vector<std::vector<Tile>>* board, int height, int width);
+    Popup(App* appconfig, std::vector<std::vector<Tile>>* board);
     ~Popup();
 
     void setText(std::string text);
