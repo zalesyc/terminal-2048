@@ -121,7 +121,8 @@ int main(int argc, const char* argv[]) {
                         {
                             Popup winPopup(&app, &board);
                             winPopup.setText("YOU WON !");
-                            getch();
+                            while (getch() != 'c') { }
+                            
                         }
                         endwin();
                         return 0;
@@ -149,7 +150,7 @@ int main(int argc, const char* argv[]) {
                     {
                         Popup lostPopup(&app, &board);
                         lostPopup.setText("YOU LOST !");
-                        getch();
+                        while (getch() != 'c') { }
                     }
                     endwin();
                     return 0;
