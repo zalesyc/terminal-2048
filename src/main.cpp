@@ -114,7 +114,7 @@ int main(int argc, const char* argv[]) {
 
             for (auto& row : board) {
                 for (Tile& tile : row) {
-                    addRandTwos(&tile, app.moveProbability);
+                    tile.addRandTwos(app.moveProbability);
                     if (tile.value == 0) {
                         noZero = false;
                     } else if (tile.value == 2048) {

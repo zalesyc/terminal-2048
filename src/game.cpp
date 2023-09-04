@@ -15,17 +15,7 @@ void colors() {
     init_pair(128, -1, COLOR_RED);
 }
 
-void addRandTwos(Tile* tile, unsigned char probability) {
-    // probability is the chance of showing new 2 on every move
-    if (tile->value == 0) {
-        std::random_device r;
-        std::default_random_engine eng(r());
-        std::uniform_int_distribution<int> uniform_dist(1, probability);
-        if (uniform_dist(eng) == 1) {
-            tile->setValue(2, true);
-        }
-    }
-}
+
 
 void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
     for (int row = 0; row < appConfig->playRows; row++) {
@@ -36,7 +26,7 @@ void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
             board->at(row).at(coll).heigth = appConfig->tileHeigth;
             board->at(row).at(coll).setValue(0, true);
 
-            addRandTwos(&board->at(row).at(coll), appConfig->startupProbability);
+            board->at(row).at(coll).addRandTwos(appConfig->startupProbability);
 
             if (appConfig->useColor) {
                 wbkgd(board->at(row).at(coll).window,

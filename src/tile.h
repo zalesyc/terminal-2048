@@ -14,6 +14,7 @@ class Tile {
     void setValue(int newValue);
     void setValue(int newValue, bool redraw);
     void drawLabel();
+    void addRandTwos(unsigned char probability);
 
   private:
     std::string print(int width);
