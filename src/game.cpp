@@ -15,8 +15,6 @@ void colors() {
     init_pair(128, -1, COLOR_RED);
 }
 
-
-
 void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
     for (int row = 0; row < appConfig->playRows; row++) {
         for (int coll = 0; coll < appConfig->playCollumns; coll++) {

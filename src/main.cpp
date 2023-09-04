@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "argumentParser.h"
+#include "board.h"
 #include "game.h"
-#include "move.h"
 #include "popup.h"
 #include "tile.h"
 
@@ -66,7 +66,8 @@ int main(int argc, const char* argv[]) {
     mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
-    std::vector<std::vector<Tile>> board(app.playRows, std::vector<Tile>(app.playCollumns));
+    // Board board(app.playRows, std::vector<Tile>(app.playCollumns));
+    Board board(app.playRows, app.playCollumns);
     boardInit(&board, &app);
 
     // end of inits
@@ -75,7 +76,7 @@ int main(int argc, const char* argv[]) {
     while (gameIsRunning) // game loop
     {
         int action = getch();
-        Move::Return returnMsg;
+        Board::moveReturn returnMsg;
         switch (action) {
             case (int)'c':
             case (int)'C':
@@ -87,29 +88,29 @@ int main(int argc, const char* argv[]) {
             case KEY_UP:
             case (char)'w':
                 mvprintw(1, 1, "up   ");
-                returnMsg = Move::Move(&board, Move::Direction::Up);
+                returnMsg = board.Move(Board::moveDirection::Up);
                 break;
 
             case KEY_DOWN:
             case (char)'s':
                 mvprintw(1, 1, "down ");
-                returnMsg = Move::Move(&board, Move::Direction::Down);
+                returnMsg = board.Move(Board::moveDirection::Down);
                 break;
 
             case KEY_RIGHT:
             case (char)'d':
                 mvprintw(1, 1, "right");
-                returnMsg = Move::Move(&board, Move::Direction::Right);
+                returnMsg = board.Move(Board::moveDirection::Right);
                 break;
 
             case KEY_LEFT:
             case (char)'a':
                 mvprintw(1, 1, "left ");
-                returnMsg = Move::Move(&board, Move::Direction::Left);
+                returnMsg = board.Move(Board::moveDirection::Left);
                 break;
         }
 
-        if (returnMsg == Move::Return::Ok) {
+        if (returnMsg == Board::moveReturn::Ok) {
             bool noZero = true;
 
             for (auto& row : board) {
@@ -121,8 +122,8 @@ int main(int argc, const char* argv[]) {
                         {
                             Popup winPopup(&app, &board);
                             winPopup.setText("YOU WON !");
-                            while (getch() != 'c') { }
-                            
+                            while (getch() != 'c') {
+                            }
                         }
                         endwin();
                         return 0;
@@ -150,7 +151,8 @@ int main(int argc, const char* argv[]) {
                     {
                         Popup lostPopup(&app, &board);
                         lostPopup.setText("YOU LOST !");
-                        while (getch() != 'c') { }
+                        while (getch() != 'c') {
+                        }
                     }
                     endwin();
                     return 0;

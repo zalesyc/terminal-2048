@@ -1,7 +1,7 @@
 #include <cmath>
 #include <ncurses.h>
-#include <string>
 #include <random>
+#include <string>
 
 #include "tile.h"
 
