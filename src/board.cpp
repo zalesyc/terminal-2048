@@ -1,8 +1,9 @@
-#include "board.h"
-#include "tile.h"
 #include <algorithm>
 #include <memory>
 #include <vector>
+
+#include "board.h"
+#include "tile.h"
 
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr); // overload for last rows
@@ -14,7 +15,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
             const int maxRow = this->size();
             bool anyMoved = false;
             std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
-
+// TODO: rename coll to col
             for (int coll = 0; coll < maxColl; coll++) {
                 std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
                 for (int stage = 0; stage < maxRow; stage++) {
@@ -22,13 +23,13 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
                     for (int row = 0; row < maxRow; row++) {
                         if (row < maxRow - 1) {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[row],
-                                           &this->at(row + 1).at(coll),
+                                           &this->get(row + 1, coll),
                                            &alreadyMergedTiles[row + 1]);
                         } else {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[row]);
                         }
                     }
@@ -50,13 +51,13 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
                     for (int row = maxRow - 1; row >= 0; row--) {
                         if (row > 0) {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[row],
-                                           &this->at(row - 1).at(coll),
+                                           &this->get(row - 1, coll),
                                            &alreadyMergedTiles[row - 1]);
                         } else {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[row]);
                         }
                     }
@@ -78,13 +79,13 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
                     for (int coll = 0; coll < maxColl; coll++) {
                         if (coll < maxColl - 1) {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[coll],
-                                           &this->at(row).at(coll + 1),
+                                           &this->get(row, coll + 1),
                                            &alreadyMergedTiles[coll + 1]);
                         } else {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[coll]);
                         }
                     }
@@ -106,13 +107,13 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
                     for (int coll = maxColl - 1; coll >= 0; coll--) {
                         if (coll > 0) {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[coll],
-                                           &this->at(row).at(coll - 1),
+                                           &this->get(row, coll - 1),
                                            &alreadyMergedTiles[coll - 1]);
                         } else {
                             singleTileMove(&anyMoved,
-                                           &firstIter, &this->at(row).at(coll),
+                                           &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[coll]);
                         }
                     }
@@ -124,6 +125,9 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
     return Board::moveReturn::NoneMoved;
 }
 
+Tile& Board::get(const int row, const int column) {
+    return this->at(row).at(column);
+}
 // normal
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond) {
     if ((mainTile->value == 0 || !(*firstIter))) { // moving

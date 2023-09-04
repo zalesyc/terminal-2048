@@ -19,6 +19,7 @@ class Board : public std::vector<std::vector<Tile>> {
                       GameLost };
 
     moveReturn Move(moveDirection direction);
+    Tile& get(const int row, const int column);
 };
 
 #endif // BOARD_H
