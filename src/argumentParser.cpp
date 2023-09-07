@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "argumentParser.h"
+#include "argumentParser.hpp"
 
 argumentParser::argumentParser(int argc, char const* argv[]) {
     if (argc > 1) {

@@ -1,9 +1,9 @@
 #include <ncurses.h>
 #include <vector>
 
-#include "game.h"
+#include "game.hpp"
 #include "random"
-#include "tile.h"
+#include "tile.hpp"
 
 void colors() {
     init_pair(2, -1, COLOR_WHITE);

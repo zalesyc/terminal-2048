@@ -2,8 +2,8 @@
 #include <memory>
 #include <vector>
 
-#include "board.h"
-#include "tile.h"
+#include "board.hpp"
+#include "tile.hpp"
 
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr); // overload for last rows

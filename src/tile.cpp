@@ -3,7 +3,7 @@
 #include <random>
 #include <string>
 
-#include "tile.h"
+#include "tile.hpp"
 
 void Tile::setValue(int newValue) {
     if (value != newValue) {

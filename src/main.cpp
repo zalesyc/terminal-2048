@@ -4,11 +4,11 @@
 #include <utility>
 #include <vector>
 
-#include "argumentParser.h"
-#include "board.h"
-#include "game.h"
-#include "popup.h"
-#include "tile.h"
+#include "argumentParser.hpp"
+#include "board.hpp"
+#include "game.hpp"
+#include "popup.hpp"
+#include "tile.hpp"
 
 int main(int argc, const char* argv[]) {
     // variables initialization

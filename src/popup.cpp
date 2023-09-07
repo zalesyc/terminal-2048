@@ -1,6 +1,6 @@
-#include "popup.h"
-#include "game.h"
-#include "tile.h"
+#include "popup.hpp"
+#include "game.hpp"
+#include "tile.hpp"
 #include <cmath>
 #include <iostream>
 #include <string>
