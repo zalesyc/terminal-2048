@@ -128,6 +128,16 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
 Tile& Board::get(const int row, const int column) {
     return this->at(row).at(column);
 }
+
+void Board::redrawAll() {
+    for (auto& row : *this) {
+        for (Tile& tile : row) {
+            wbkgd(tile.window, 0); // this is workaround to recolor window, because if i set window to the same color, it doesn't recolor,
+            tile.drawLabel();      // so i am setting it to 0 and then to its color again.
+        }
+    }
+}
+
 // normal
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond) {
     if ((mainTile->value == 0 || !(*firstIter))) { // moving
@@ -151,3 +161,4 @@ void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMerge
         mainTile->setValue(0);
     }
 }
+

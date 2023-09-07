@@ -18,5 +18,8 @@ struct App { // defalut options, non const variables may be overwritten
 
 void colors();
 void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig);
+int selectMenu(const int row, const int column, const std::vector<std::string> options, const int highlightedOption);
+void welcomeScreen(App appConfig);
+
 
 #endif // APP_H

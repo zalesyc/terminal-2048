@@ -6,9 +6,8 @@
 #include <string>
 #include <vector>
 
-Popup::Popup(App* appconfig, std::vector<std::vector<Tile>>* board) {
+Popup::Popup(App* appconfig) {
     m_appconfig = appconfig;
-    m_board = board;
     // calculating the size and position of the popup
     const int rowMargin = m_appconfig->tileHeigth * ((appconfig->playRows > 6) ? 2 : 0.5);
     const int colMargin = m_appconfig->tileWidth * ((appconfig->playCollumns > 6) ? 2 : 0.5);
@@ -29,12 +28,7 @@ Popup::~Popup() {
     wborder(m_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     wrefresh(m_win);
     delwin(m_win);
-    for (auto& row : *m_board) {
-        for (Tile& tile : row) {
-            wbkgd(tile.window, 0); // this is workaround to recolor window, because if i set window to the same color, it doesn't recolor,
-            tile.drawLabel();      // so i am setting it to 0 and then to its color again.
-        }
-    }
+    
 }
 
 void Popup::setText(std::string text) {

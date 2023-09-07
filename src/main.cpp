@@ -46,6 +46,7 @@ int main(int argc, const char* argv[]) {
     initscr();
     noecho();
     keypad(stdscr, TRUE);
+    curs_set(FALSE); 
 
     if (argc > 0 && argParser.optionExists("--no-color")) {
         app.useColor = false;
@@ -60,17 +61,20 @@ int main(int argc, const char* argv[]) {
 
         colors();
     }
+    // end of inits
 
+
+    // welcome screen
+    welcomeScreen(app);
+
+    // create and draw board
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
     mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 1, 1, "How to play: ");
     mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
-    // Board board(app.playRows, std::vector<Tile>(app.playCollumns));
     Board board(app.playRows, app.playCollumns);
     boardInit(&board, &app);
-
-    // end of inits
 
     bool gameIsRunning = 1;
     while (gameIsRunning) // game loop
@@ -119,12 +123,12 @@ int main(int argc, const char* argv[]) {
                     if (tile.value == 0) {
                         noZero = false;
                     } else if (tile.value == 2048) {
-                        {
-                            Popup winPopup(&app, &board);
-                            winPopup.setText("YOU WON !");
-                            while (getch() != 'c') {
-                            }
+                        
+                        Popup winPopup(&app);
+                        winPopup.setText("YOU WON !");
+                        while (getch() != 'c') {
                         }
+                        
                         endwin();
                         return 0;
                     }
@@ -148,11 +152,9 @@ int main(int argc, const char* argv[]) {
                 }
 
                 if (end) {
-                    {
-                        Popup lostPopup(&app, &board);
-                        lostPopup.setText("YOU LOST !");
-                        while (getch() != 'c') {
-                        }
+                    Popup lostPopup(&app);
+                    lostPopup.setText("YOU LOST !");
+                    while (getch() != 'c') {
                     }
                     endwin();
                     return 0;
