@@ -7,20 +7,18 @@
 #include <vector>
 
 Popup::Popup(App* appconfig) {
-    m_appconfig = appconfig;
     // calculating the size and position of the popup
-    const int rowMargin = m_appconfig->tileHeigth * ((appconfig->playRows > 6) ? 2 : 0.5);
-    const int colMargin = m_appconfig->tileWidth * ((appconfig->playCollumns > 6) ? 2 : 0.5);
-    const int topLeftX = m_appconfig->boardStartingCollumn + colMargin;
-    const int topLeftY = m_appconfig->boardStartingRow + rowMargin;
-    const int bottomRightX = m_appconfig->boardStartingCollumn + (m_appconfig->playCollumns * m_appconfig->tileWidth) - colMargin;
-    const int bottomRightY = m_appconfig->boardStartingRow + (m_appconfig->playRows * m_appconfig->tileHeigth) - rowMargin;
-    m_winWidth = bottomRightX - topLeftX;
-    m_winHeight = bottomRightY - topLeftY;
+    const int rowMargin = appconfig->tileHeigth * ((appconfig->playRows > 6) ? 2 : 0.5);
+    const int colMargin = appconfig->tileWidth * ((appconfig->playCollumns > 6) ? 2 : 0.5);
+    const int column = appconfig->boardStartingCollumn + colMargin;
+    const int row = appconfig->boardStartingRow + rowMargin;
+    const int width = (appconfig->playCollumns * appconfig->tileWidth) - colMargin;
+    const int height = (appconfig->playRows * appconfig->tileHeigth) - rowMargin;
+    this->drawWindow(row, column, height, width);
+}
 
-    m_win = newwin(m_winHeight, m_winWidth, topLeftY, topLeftX);
-    box(m_win, 0, 0);
-    wrefresh(m_win);
+Popup::Popup(const int row, const int column, const int height, const int width) {
+    this->drawWindow(row, column, height, width);
 }
 
 Popup::~Popup() {
@@ -28,15 +26,17 @@ Popup::~Popup() {
     wborder(m_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     wrefresh(m_win);
     delwin(m_win);
-    
 }
 
 void Popup::setText(std::string text) {
     m_text = text;
-    if (m_text.length() < m_winWidth) {
-        mvwprintw(m_win, std::ceil((m_winHeight / 2.0) - 1), 1, "%s", this->print(m_winWidth - 2).c_str());
-        wrefresh(m_win);
-    }
+    mvwprintw(m_win, std::ceil((m_winHeight / 2.0) - 1), 1, "%s", this->print(m_winWidth - 2).c_str());
+    wrefresh(m_win);
+}
+
+void Popup::setTitle(std::string text) {
+    mvwprintw(this->m_win, 0, 0, text.c_str());
+    wrefresh(this->m_win);
 }
 
 std::string Popup::print(int width) {
@@ -48,4 +48,14 @@ std::string Popup::print(int width) {
     int pad1 = diff / 2;
     int pad2 = diff - pad1;
     return std::string(pad1, ' ') + m_text + std::string(pad2, ' ');
+}
+
+void Popup::drawWindow(const int row, const int column, const int height, const int width) {
+    m_winWidth = width;
+    m_winHeight = height;
+
+    m_win = newwin(m_winHeight, m_winWidth, row, column);
+    box(m_win, 0, 0);
+    wrefresh(m_win);
+    refresh();
 }

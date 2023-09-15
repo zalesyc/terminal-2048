@@ -15,7 +15,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
             const int maxRow = this->size();
             bool anyMoved = false;
             std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
-// TODO: rename coll to col
+            // TODO: rename coll to col
             for (int coll = 0; coll < maxColl; coll++) {
                 std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
                 for (int stage = 0; stage < maxRow; stage++) {
@@ -161,4 +161,3 @@ void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMerge
         mainTile->setValue(0);
     }
 }
-

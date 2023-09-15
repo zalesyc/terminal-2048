@@ -10,18 +10,22 @@
 
 class Popup {
   public:
+    Popup(const int row, const int column, const int height, const int width);
     Popup(App* appconfig);
     ~Popup();
 
     void setText(std::string text);
+    void setTitle(std::string text);
 
   private:
     std::string print(int width);
+    void drawWindow(const int topLeftX, const int topLeftY, const int bottomRightX, const int bottomRightY);
+
+  public:
+    WINDOW* m_win;
 
   private:
-    WINDOW* m_win;
     std::string m_text;
-    App* m_appconfig;
     std::vector<std::vector<Tile>>* m_board;
     int m_winWidth;
     int m_winHeight;
