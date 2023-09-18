@@ -1,10 +1,11 @@
 #include <array>
+#include <cctype>
 #include <iostream>
 #include <ncurses.h>
+#include <random>
 #include <string>
 #include <utility>
 #include <vector>
-#include <random>
 
 #include "game.hpp"
 #include "popup.hpp"
@@ -81,7 +82,6 @@ void welcomeScreen(App* appConfig) {
     clear();
 }
 
-
 void editField(std::string name, int* variable, std::pair<int, int> range) {
     Popup field = Popup(16, 1, 5, 22);
     field.setTitle("Set " + name);
@@ -90,29 +90,53 @@ void editField(std::string name, int* variable, std::pair<int, int> range) {
     curs_set(true);
     echo();
     wmove(field.m_win, 2, 1);
-
     wrefresh(field.m_win);
     char answer[50];
     wgetstr(field.m_win, answer);
     curs_set(false);
+    noecho();
+
+    const std::string strAnswer = answer;
+
+    // check if the answer is valid
+    for (char singleChar : strAnswer) {
+        if (!std::isdigit(singleChar)) {
+            return;
+        }
+    }
+    const int intAnswer = std::stoi(strAnswer);
+    if (intAnswer < range.first || intAnswer > range.second) {
+        return;
+    }
+
+    *variable = intAnswer;
+
+    return;
 }
 
 void editOptions(App* appConfig, const int row, const int column) {
     Popup popup = Popup(row, column, 8, 22);
     popup.setTitle("Set Options");
+    int myPointer = 0; // this is just a workaround as per (two lines down), TODO: make a more roboust solution
+    while (true) {
+        const int optionToEdit = selectMenu(popup.m_win, 1, 1, {{"Board Rows", &appConfig->playRows}, {"Board Columns", &appConfig->playCollumns}, {"Tile Height", &appConfig->tileHeigth}, {"Tile Width", &appConfig->tileWidth}, {"End Editing", &myPointer /* here i'm using myPointer as a workaround for it to work*/}}, 0);
+        switch (optionToEdit) {
+            case 0:
+                editField("Board Rows", &appConfig->playRows, {3, 100});
+                break;
+            case 1:
+                editField("Board Columns", &appConfig->playCollumns, {3, 100});
+                break;
+            case 2:
+                editField("Tile Height", &appConfig->tileHeigth, {3, 10});
+                break;
+            case 3:
+                editField("Tile Width", &appConfig->tileWidth, {5, 15});
+                break;
+            case 4:
+                return;
+        }
 
-    const int optionToEdit = selectMenu(popup.m_win, 1, 1, {{"Board Rows", &appConfig->playRows}, {"Board Columns", &appConfig->playCollumns}, {"Tile Height", &appConfig->tileHeigth}, {"Tile Width", &appConfig->tileWidth}}, 0);
-    switch (optionToEdit) {
-        case 0:
-            editField("Board Rows", &appConfig->playRows, {3, 100});
-        case 1:
-            editField("Board Columns", &appConfig->playCollumns, {3, 100});
-        case 2:
-            editField("Tile Height", &appConfig->tileHeigth, {3, 10});
-        case 3:
-            editField("Tile Width", &appConfig->tileWidth, {5, 15});
+        wrefresh(popup.m_win);
     }
-    wrefresh(popup.m_win);
-
-    getch();
 }

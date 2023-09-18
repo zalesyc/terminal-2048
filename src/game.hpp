@@ -20,5 +20,4 @@ void colors();
 void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig);
 void welcomeScreen(App* appConfig);
 
-
 #endif // APP_H

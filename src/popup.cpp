@@ -60,7 +60,6 @@ void Popup::drawWindow(const int row, const int column, const int height, const 
     refresh();
 }
 
-
 int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption) {
     int choice = highlightedOption;
 
