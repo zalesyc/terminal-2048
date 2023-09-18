@@ -31,4 +31,8 @@ class Popup {
     int m_winHeight;
 };
 
+int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
+int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::pair<std::string, int*>> options, const int highlightedOption);
+
+
 #endif // POPUP_H
