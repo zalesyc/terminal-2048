@@ -4,10 +4,11 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <random>
 
 #include "game.hpp"
 #include "popup.hpp"
-#include "random"
+
 #include "tile.hpp"
 
 void colors() {
@@ -126,7 +127,8 @@ void editField(std::string name, int* variable, std::pair<int, int> range) {
     wmove(field.m_win, 2, 1);
 
     wrefresh(field.m_win);
-    getch();
+    char answer[50];
+    wgetstr(field.m_win, answer);
     curs_set(false);
 }
 
