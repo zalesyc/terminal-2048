@@ -23,7 +23,7 @@ Popup::Popup(const int row, const int column, const int height, const int width)
 
 Popup::~Popup() {
     this->setText(std::string(m_text.length(), ' '));
-    wborder(m_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    werase(m_win);
     wrefresh(m_win);
     delwin(m_win);
 }
@@ -60,6 +60,47 @@ void Popup::drawWindow(const int row, const int column, const int height, const 
     refresh();
 }
 
+int selectMenu(WINDOW* win, int row, const int column, const std::vector<SelectMenuOption> options, const int highlightedOption) {
+    int choice = highlightedOption;
+
+    while (1) {
+        // Print the menu
+
+        for (int i = 0; i < options.size(); i++) {
+            if (i == choice) {
+                wattron(win, A_REVERSE); // Highlight the current choice
+            }
+            if (options.at(i).hasValue) {
+                mvwprintw(win, i + row, column, "%s: %d", options.at(i).name.c_str(), *options.at(i).value);
+            } else {
+                mvwprintw(win, i + row, column, "%s", options.at(i).name.c_str());
+            }
+            wattroff(win, A_REVERSE); // Turn off highlighting
+        }
+        wrefresh(win);
+
+        // Get user input
+        int c = getch();
+
+        switch (c) {
+            case KEY_UP:
+                choice = (choice - 1 + options.size()) % options.size();
+                if (options.at(choice).name.empty()) {
+                    choice = (choice - 1 + options.size()) % options.size();
+                }
+                break;
+            case KEY_DOWN:
+                choice = (choice + 1) % options.size();
+                if (options.at(choice).name.empty()) {
+                    choice = (choice + 1) % options.size();
+                }
+                break;
+            case 10: // Enter key
+                return choice;
+        }
+    }
+}
+
 int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption) {
     int choice = highlightedOption;
 
@@ -88,43 +129,6 @@ int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::st
             case KEY_DOWN:
                 choice = (choice + 1) % options.size();
                 if (options.at(choice).empty()) {
-                    choice = (choice + 1) % options.size();
-                }
-                break;
-            case 10: // Enter key
-                return choice;
-        }
-    }
-}
-
-int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::pair<std::string, int*>> options, const int highlightedOption) {
-    int choice = highlightedOption;
-
-    while (1) {
-        // Print the menu
-
-        for (int i = 0; i < options.size(); i++) {
-            if (i == choice) {
-                wattron(win, A_REVERSE); // Highlight the current choice
-            }
-            mvwprintw(win, i + row, column, "%s: %d", options.at(i).first.c_str(), *options.at(i).second);
-            wattroff(win, A_REVERSE); // Turn off highlighting
-        }
-        wrefresh(win);
-
-        // Get user input
-        int c = getch();
-
-        switch (c) {
-            case KEY_UP:
-                choice = (choice - 1 + options.size()) % options.size();
-                if (options.at(choice).first.empty()) {
-                    choice = (choice - 1 + options.size()) % options.size();
-                }
-                break;
-            case KEY_DOWN:
-                choice = (choice + 1) % options.size();
-                if (options.at(choice).first.empty()) {
                     choice = (choice + 1) % options.size();
                 }
                 break;

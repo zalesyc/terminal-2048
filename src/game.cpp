@@ -104,22 +104,32 @@ void editField(std::string name, int* variable, std::pair<int, int> range) {
             return;
         }
     }
+    if (strAnswer.empty()) {
+        return;
+    }
+
     const int intAnswer = std::stoi(strAnswer);
     if (intAnswer < range.first || intAnswer > range.second) {
         return;
     }
 
     *variable = intAnswer;
-
     return;
 }
 
 void editOptions(App* appConfig, const int row, const int column) {
+    const SelectMenuOption BoardRows = {"Board Rows", true, &appConfig->playRows};
+    const SelectMenuOption BoardColumns = {"Board Columns", true, &appConfig->playCollumns};
+    const SelectMenuOption TileHeight = {"Tile Height", true, &appConfig->tileHeigth};
+    const SelectMenuOption TileWidth = {"Tile Width", true, &appConfig->tileWidth};
+    const SelectMenuOption EmptyLine = {"", false, nullptr};
+    const SelectMenuOption Exit = {"End Editing", false, nullptr};
+
     Popup popup = Popup(row, column, 8, 22);
     popup.setTitle("Set Options");
-    int myPointer = 0; // this is just a workaround as per (two lines down), TODO: make a more roboust solution
+
     while (true) {
-        const int optionToEdit = selectMenu(popup.m_win, 1, 1, {{"Board Rows", &appConfig->playRows}, {"Board Columns", &appConfig->playCollumns}, {"Tile Height", &appConfig->tileHeigth}, {"Tile Width", &appConfig->tileWidth}, {"End Editing", &myPointer /* here i'm using myPointer as a workaround for it to work*/}}, 0);
+        const int optionToEdit = selectMenu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 0);
         switch (optionToEdit) {
             case 0:
                 editField("Board Rows", &appConfig->playRows, {3, 100});
@@ -133,7 +143,7 @@ void editOptions(App* appConfig, const int row, const int column) {
             case 3:
                 editField("Tile Width", &appConfig->tileWidth, {5, 15});
                 break;
-            case 4:
+            case 5:
                 return;
         }
 
