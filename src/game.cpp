@@ -63,7 +63,7 @@ void welcomeScreen(App* appConfig) {
         mvprintw(i, 0, "%s", asciiText.at(i).c_str());
     }
     refresh();
-    const int selectedOption = selectMenu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
+    const int selectedOption = SelectMenu::menu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
 
     switch (selectedOption) {
         case 0:
@@ -118,18 +118,18 @@ void editField(std::string name, int* variable, std::pair<int, int> range) {
 }
 
 void editOptions(App* appConfig, const int row, const int column) {
-    const SelectMenuOption BoardRows = {"Board Rows", true, &appConfig->playRows};
-    const SelectMenuOption BoardColumns = {"Board Columns", true, &appConfig->playCollumns};
-    const SelectMenuOption TileHeight = {"Tile Height", true, &appConfig->tileHeigth};
-    const SelectMenuOption TileWidth = {"Tile Width", true, &appConfig->tileWidth};
-    const SelectMenuOption EmptyLine = {"", false, nullptr};
-    const SelectMenuOption Exit = {"End Editing", false, nullptr};
+    const SelectMenu::Option BoardRows = {"Board Rows", true, &appConfig->playRows};
+    const SelectMenu::Option BoardColumns = {"Board Columns", true, &appConfig->playCollumns};
+    const SelectMenu::Option TileHeight = {"Tile Height", true, &appConfig->tileHeigth};
+    const SelectMenu::Option TileWidth = {"Tile Width", true, &appConfig->tileWidth};
+    const SelectMenu::Option EmptyLine = {"", false, nullptr};
+    const SelectMenu::Option Exit = {"End Editing", false, nullptr};
 
     Popup popup = Popup(row, column, 8, 22);
     popup.setTitle("Set Options");
 
     while (true) {
-        const int optionToEdit = selectMenu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 0);
+        const int optionToEdit = SelectMenu::menu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 0);
         switch (optionToEdit) {
             case 0:
                 editField("Board Rows", &appConfig->playRows, {3, 100});
