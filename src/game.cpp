@@ -60,7 +60,7 @@ void welcomeScreen(App* appConfig) {
         R"(|____|\___/   |_| \___/ )"};
 
     for (int i = 0; i < asciiText.size(); i++) {
-        mvprintw(i, 0, asciiText.at(i).c_str());
+        mvprintw(i, 0, "%s", asciiText.at(i).c_str());
     }
     refresh();
     const int selectedOption = selectMenu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);

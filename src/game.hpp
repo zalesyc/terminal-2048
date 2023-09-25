@@ -2,6 +2,7 @@
 #define APP_H
 
 #include "tile.hpp"
+#include <vector>
 
 struct App { // defalut options, non const variables may be overwritten
     int playRows = 4;

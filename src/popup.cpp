@@ -1,6 +1,5 @@
 #include "popup.hpp"
 #include "game.hpp"
-#include "tile.hpp"
 #include <cmath>
 #include <iostream>
 #include <string>
@@ -35,7 +34,7 @@ void Popup::setText(std::string text) {
 }
 
 void Popup::setTitle(std::string text) {
-    mvwprintw(this->m_win, 0, 0, text.c_str());
+    mvwprintw(this->m_win, 0, 0, "%s", text.c_str());
     wrefresh(this->m_win);
 }
 
@@ -111,7 +110,7 @@ int selectMenu(WINDOW* win, int row, const int column, const std::vector<std::st
             if (i == choice) {
                 wattron(win, A_REVERSE); // Highlight the current choice
             }
-            mvwprintw(win, i + row, column, options.at(i).c_str());
+            mvwprintw(win, i + row, column, "%s", options.at(i).c_str());
             wattroff(win, A_REVERSE); // Turn off highlighting
         }
         wrefresh(win);
