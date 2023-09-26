@@ -16,9 +16,10 @@ struct App { // defalut options, non const variables may be overwritten
     const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
     const unsigned char moveProbability = 12;   // and every move
 };
+enum welcomeScreenReturn {Play, Exit};
 
 void colors();
 void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig);
-void welcomeScreen(App* appConfig);
+welcomeScreenReturn welcomeScreen(App* appConfig);
 
 #endif // APP_H

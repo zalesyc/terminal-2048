@@ -13,6 +13,7 @@
 
 void editField(std::string name, int* variable, std::pair<int, int> range);
 void editOptions(App* appConfig, const int row, const int column);
+void showHelp(const int row, const int column);
 
 void colors() {
     init_pair(2, -1, COLOR_WHITE);
@@ -48,7 +49,7 @@ void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
     refresh();
 }
 
-void welcomeScreen(App* appConfig) {
+welcomeScreenReturn welcomeScreen(App* appConfig) {
     // TODO: show options on the right
     clear();
     const std::array<std::string, 6> asciiText = {
@@ -71,15 +72,15 @@ void welcomeScreen(App* appConfig) {
             break;
 
         case 1:
-            // show help
+            showHelp(7, 1);
             break;
         case 4:
-            // return exit
-            break;
+            return welcomeScreenReturn::Exit;
     }
 
     refresh();
     clear();
+    return welcomeScreenReturn::Play;
 }
 
 void editField(std::string name, int* variable, std::pair<int, int> range) {
@@ -149,4 +150,11 @@ void editOptions(App* appConfig, const int row, const int column) {
 
         wrefresh(popup.m_win);
     }
+}
+
+void showHelp(const int row, const int column) {
+    Popup popup = Popup(row, column, 8, 40);
+    popup.setTitle("Help");
+    popup.setText("Some Help, possibly on multiple Line need long line to test text wrapping aa bbbb cccccc dddddddd \n use arrows to move \n press any key to exit");
+    getch();
 }

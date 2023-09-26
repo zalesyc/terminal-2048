@@ -64,7 +64,10 @@ int main(int argc, const char* argv[]) {
     // end of inits
 
     // welcome screen
-    welcomeScreen(&app);
+    if (welcomeScreen(&app) == welcomeScreenReturn::Exit) {
+        endwin();
+        return 0;
+    }
 
     // create and draw board
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
