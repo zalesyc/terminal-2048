@@ -32,15 +32,14 @@ class Popup {
 };
 
 namespace SelectMenu {
-    struct Option {
-        const std::string name;
-        const bool hasValue;
-        const int* value;
-    };
+struct Option {
+    const std::string name;
+    const bool hasValue;
+    const int* value;
+};
 
-    int menu(WINDOW* win, int row, const int column, const std::vector<Option> options, const int highlightedOption);
-    int menu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
-}
-
+int menu(WINDOW* win, int row, const int column, const std::vector<Option> options, const int highlightedOption);
+int menu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
+} // namespace SelectMenu
 
 #endif // POPUP_H

@@ -2,9 +2,9 @@
 #include "game.hpp"
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 Popup::Popup(App* appconfig) {
     // calculating the size and position of the popup

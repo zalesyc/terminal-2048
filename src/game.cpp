@@ -2,6 +2,7 @@
 #include <cctype>
 #include <iostream>
 #include <ncurses.h>
+#include <ncurses/curses.h>
 #include <random>
 #include <string>
 #include <utility>
@@ -64,22 +65,27 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
         mvprintw(i, 0, "%s", asciiText.at(i).c_str());
     }
     refresh();
-    const int selectedOption = SelectMenu::menu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
+    while (true) {
+        const int selectedOption = SelectMenu::menu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
 
-    switch (selectedOption) {
-        case 0:
-            editOptions(appConfig, 7, 1);
-            break;
+        switch (selectedOption) {
+            case 0:
+                editOptions(appConfig, 7, 1);
+                break;
 
-        case 1:
-            showHelp(7, 1);
-            break;
-        case 4:
-            return welcomeScreenReturn::Exit;
+            case 1:
+                showHelp(7, 1);
+                break;
+
+            case 3:
+                clear();
+                refresh();
+                return welcomeScreenReturn::Play;
+
+            case 4:
+                return welcomeScreenReturn::Exit;
+        }
     }
-
-    refresh();
-    clear();
     return welcomeScreenReturn::Play;
 }
 
@@ -155,6 +161,10 @@ void editOptions(App* appConfig, const int row, const int column) {
 void showHelp(const int row, const int column) {
     Popup popup = Popup(row, column, 8, 40);
     popup.setTitle("Help");
-    popup.setText("Some Help, possibly on multiple Line need long line to test text wrapping aa bbbb cccccc dddddddd \n use arrows to move \n press any key to exit");
+    mvwprintw(popup.m_win, 1, 1, "This is my Help");
+    mvwprintw(popup.m_win, 2, 1, "Use Arrows To move");
+    mvwprintw(popup.m_win, 6, 1, "press any key to exit");
+    wrefresh(popup.m_win);
+
     getch();
 }
