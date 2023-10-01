@@ -8,7 +8,7 @@
 
 class Board : public std::vector<std::vector<Tile>> {
   public:
-    Board(int rows, int columns) : std::vector<std::vector<Tile>>(rows, std::vector<Tile>(columns)) {}
+    Board(const int rows, const int columns);
 
     enum moveDirection { Left,
                          Right,
@@ -22,6 +22,10 @@ class Board : public std::vector<std::vector<Tile>> {
     Tile& get(const int row, const int column);
     void redrawAll();
     void populateWithRandomTwos();
+
+  private:
+    const int m_rows;
+    const int m_columns;
 };
 
 #endif // BOARD_H

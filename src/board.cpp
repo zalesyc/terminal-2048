@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -9,20 +10,23 @@
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr); // overload for last rows
 
+Board::Board(const int rows, const int columns)
+    : std::vector<std::vector<Tile>>(rows, std::vector<Tile>(columns)),
+      m_rows(rows),
+      m_columns(columns) {}
+
 Board::moveReturn Board::Move(Board::moveDirection direction) {
     switch (direction) {
         case Board::moveDirection::Up: {
-            const int maxColl = this->at(0).size();
-            const int maxRow = this->size();
             bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_rows]());
             // TODO: rename coll to col
-            for (int coll = 0; coll < maxColl; coll++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
-                for (int stage = 0; stage < maxRow; stage++) {
+            for (int coll = 0; coll < m_columns; coll++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_rows, 0);
+                for (int stage = 0; stage < m_rows; stage++) {
                     bool firstIter = true;
-                    for (int row = 0; row < maxRow; row++) {
-                        if (row < maxRow - 1) {
+                    for (int row = 0; row < m_rows; row++) {
+                        if (row < m_rows - 1) {
                             singleTileMove(&anyMoved,
                                            &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[row],
@@ -40,16 +44,14 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
         }
 
         case Board::moveDirection::Down: {
-            const int maxColl = this->at(0).size();
-            const int maxRow = this->size();
             bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxRow]());
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_rows]());
 
-            for (int coll = 0; coll < maxColl; coll++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxRow, 0);
-                for (int stage = 0; stage < maxRow; stage++) {
+            for (int coll = 0; coll < m_columns; coll++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_rows, 0);
+                for (int stage = 0; stage < m_rows; stage++) {
                     bool firstIter = true;
-                    for (int row = maxRow - 1; row >= 0; row--) {
+                    for (int row = m_rows - 1; row >= 0; row--) {
                         if (row > 0) {
                             singleTileMove(&anyMoved,
                                            &firstIter, &this->get(row, coll),
@@ -68,17 +70,15 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
         }
 
         case Board::moveDirection::Left: {
-            const int maxColl = this->at(0).size();
-            const int maxRow = this->size();
             bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_columns]());
 
-            for (int row = 0; row < maxRow; row++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
-                for (int stage = 0; stage < maxColl; stage++) {
+            for (int row = 0; row < m_rows; row++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_columns, 0);
+                for (int stage = 0; stage < m_columns; stage++) {
                     bool firstIter = true;
-                    for (int coll = 0; coll < maxColl; coll++) {
-                        if (coll < maxColl - 1) {
+                    for (int coll = 0; coll < m_columns; coll++) {
+                        if (coll < m_columns - 1) {
                             singleTileMove(&anyMoved,
                                            &firstIter, &this->get(row, coll),
                                            &alreadyMergedTiles[coll],
@@ -96,16 +96,14 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
         }
 
         case Board::moveDirection::Right: {
-            const int maxColl = this->at(0).size();
-            const int maxRow = this->size();
             bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[maxColl]());
+            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_columns]());
 
-            for (int row = 0; row < maxRow; row++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + maxColl, 0);
-                for (int stage = 0; stage < maxColl; stage++) {
+            for (int row = 0; row < m_rows; row++) {
+                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_columns, 0);
+                for (int stage = 0; stage < m_columns; stage++) {
                     bool firstIter = true;
-                    for (int coll = maxColl - 1; coll >= 0; coll--) {
+                    for (int coll = m_columns - 1; coll >= 0; coll--) {
                         if (coll > 0) {
                             singleTileMove(&anyMoved,
                                            &firstIter, &this->get(row, coll),
@@ -140,11 +138,11 @@ void Board::redrawAll() {
 }
 
 void Board::populateWithRandomTwos() {
-    const int maxTilesToPopulate = this->size() * this->at(0).size() - 2; // num of board tiles - 2
-    const int minTilesToPopulate = 2;                                     // adleast 2 tiles will have 2 in them
+    const int maxTilesToPopulate = m_rows * m_columns - 2; // num of board tiles - 2
+    const int minTilesToPopulate = 2;                      // adleast 2 tiles will have 2 in them
     const int tilesToPopulate = randomNumber(minTilesToPopulate, maxTilesToPopulate);
     for (int i = 0; i < tilesToPopulate; i++) {
-        this->at(randomNumber(0, this->size() - 1)).at(randomNumber(0, this->at(0).size() - 1)).setValue(2);
+        this->at(randomNumber(0, m_rows - 1)).at(randomNumber(0, m_columns - 1)).setValue(2);
     }
 }
 
