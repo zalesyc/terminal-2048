@@ -8,6 +8,7 @@
 #include <utility>
 #include <vector>
 
+#include "board.hpp"
 #include "game.hpp"
 #include "popup.hpp"
 #include "tile.hpp"
@@ -26,7 +27,7 @@ void colors() {
     init_pair(128, -1, COLOR_RED);
 }
 
-void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
+void boardInit(Board* board, App* appConfig) {
     for (int row = 0; row < appConfig->playRows; row++) {
         for (int coll = 0; coll < appConfig->playCollumns; coll++) {
 
@@ -34,8 +35,6 @@ void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
             board->at(row).at(coll).width = appConfig->tileWidth;
             board->at(row).at(coll).heigth = appConfig->tileHeigth;
             board->at(row).at(coll).setValue(0, true);
-
-            board->at(row).at(coll).addRandTwos(appConfig->startupProbability);
 
             if (appConfig->useColor) {
                 wbkgd(board->at(row).at(coll).window,
@@ -47,6 +46,7 @@ void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig) {
             wrefresh(board->at(row).at(coll).window);
         }
     }
+    board->populateWithRandomTwos();
     refresh();
 }
 
@@ -167,4 +167,12 @@ void showHelp(const int row, const int column) {
     wrefresh(popup.m_win);
 
     getch();
+}
+
+// min, max both inclusive
+int randomNumber(const int min, const int max) {
+    std::random_device r;
+    std::default_random_engine eng(r());
+    std::uniform_int_distribution<int> uniform_dist(min, max);
+    return uniform_dist(eng);
 }

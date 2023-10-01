@@ -1,8 +1,8 @@
 #include <cmath>
 #include <ncurses.h>
-#include <random>
 #include <string>
 
+#include "game.hpp"
 #include "tile.hpp"
 
 void Tile::setValue(int newValue) {
@@ -19,13 +19,10 @@ void Tile::setValue(int newValue, bool redraw) {
     }
 }
 
-void Tile::addRandTwos(unsigned char probability) {
+void Tile::addRandTwos(const char probability) {
     // probability is the chance of showing new 2 on every move
     if (value == 0) {
-        std::random_device r;
-        std::default_random_engine eng(r());
-        std::uniform_int_distribution<int> uniform_dist(1, probability);
-        if (uniform_dist(eng) == 1) {
+        if (randomNumber(1, probability) == 1) {
             this->setValue(2, true);
         }
     }

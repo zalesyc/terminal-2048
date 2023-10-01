@@ -21,6 +21,7 @@ class Board : public std::vector<std::vector<Tile>> {
     moveReturn Move(moveDirection direction);
     Tile& get(const int row, const int column);
     void redrawAll();
+    void populateWithRandomTwos();
 };
 
 #endif // BOARD_H

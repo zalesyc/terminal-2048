@@ -1,8 +1,10 @@
 #ifndef APP_H
 #define APP_H
 
-#include "tile.hpp"
+#include <cstdlib>
 #include <vector>
+
+#include "board.hpp"
 
 struct App { // defalut options, non const variables may be overwritten
     int playRows = 4;
@@ -16,11 +18,13 @@ struct App { // defalut options, non const variables may be overwritten
     const unsigned char startupProbability = 6; // pobability of new "2" appering on starup
     const unsigned char moveProbability = 12;   // and every move
 };
+
 enum welcomeScreenReturn { Play,
                            Exit };
 
 void colors();
-void boardInit(std::vector<std::vector<Tile>>* board, App* appConfig);
+void boardInit(Board* board, App* appConfig);
 welcomeScreenReturn welcomeScreen(App* appConfig);
+int randomNumber(const int min, const int max);
 
 #endif // APP_H

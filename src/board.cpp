@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "board.hpp"
+#include "game.hpp"
 #include "tile.hpp"
 
 void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
@@ -135,6 +136,15 @@ void Board::redrawAll() {
             wbkgd(tile.window, 0); // this is workaround to recolor window, because if i set window to the same color, it doesn't recolor,
             tile.drawLabel();      // so i am setting it to 0 and then to its color again.
         }
+    }
+}
+
+void Board::populateWithRandomTwos() {
+    const int maxTilesToPopulate = this->size() * this->at(0).size() - 2; // num of board tiles - 2
+    const int minTilesToPopulate = 2;                                     // adleast 2 tiles will have 2 in them
+    const int tilesToPopulate = randomNumber(minTilesToPopulate, maxTilesToPopulate);
+    for (int i = 0; i < tilesToPopulate; i++) {
+        this->at(randomNumber(0, this->size() - 1)).at(randomNumber(0, this->at(0).size() - 1)).setValue(2);
     }
 }
 
