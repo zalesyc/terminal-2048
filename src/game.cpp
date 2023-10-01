@@ -136,7 +136,7 @@ void editOptions(App* appConfig, const int row, const int column) {
     popup.setTitle("Set Options");
 
     while (true) {
-        const int optionToEdit = SelectMenu::menu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 0);
+        const int optionToEdit = SelectMenu::menu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 5);
         switch (optionToEdit) {
             case 0:
                 editField("Board Rows", &appConfig->playRows, {3, 100});
