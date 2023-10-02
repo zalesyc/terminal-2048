@@ -72,7 +72,6 @@ int main(int argc, const char* argv[]) {
         }
     }
 
-
     // create and draw board
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
     mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 1, 1, "How to play: ");
@@ -83,6 +82,8 @@ int main(int argc, const char* argv[]) {
     boardInit(&board, &app);
 
     bool gameIsRunning = 1;
+    bool alreadyWon = false;
+
     while (gameIsRunning) // game loop
     {
         int action = getch();
@@ -122,21 +123,25 @@ int main(int argc, const char* argv[]) {
 
         if (returnMsg == Board::moveReturn::Ok) {
             bool noZero = true;
-
             for (auto& row : board) {
                 for (Tile& tile : row) {
                     tile.addRandTwos(app.moveProbability);
                     if (tile.value == 0) {
                         noZero = false;
-                    } else if (tile.value == 2048) {
+                    } else if (tile.value == 2048 && !alreadyWon) {
+                        {
+                            Popup winPopup(&app);
+                            winPopup.setText("YOU WON !");
 
-                        Popup winPopup(&app);
-                        winPopup.setText("YOU WON !");
-                        while (getch() != 'c') {
+                            int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
+                            if (option == 0) {
+                                endwin();
+                                return 0;
+                            }
                         }
-
-                        endwin();
-                        return 0;
+                        board.redrawAll();
+                        alreadyWon = true;
+                        continue;
                     }
                 }
             }

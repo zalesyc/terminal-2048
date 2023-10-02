@@ -66,7 +66,7 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
     }
     refresh();
     while (true) {
-        const int selectedOption = SelectMenu::menu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
+        const int selectedOption = SelectMenu::verticalMenu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
 
         switch (selectedOption) {
             case 0:
@@ -136,7 +136,7 @@ void editOptions(App* appConfig, const int row, const int column) {
     popup.setTitle("Set Options");
 
     while (true) {
-        const int optionToEdit = SelectMenu::menu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 5);
+        const int optionToEdit = SelectMenu::verticalMenu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 5);
         switch (optionToEdit) {
             case 0:
                 editField("Board Rows", &appConfig->playRows, {3, 100});

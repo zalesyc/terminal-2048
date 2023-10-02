@@ -23,12 +23,12 @@ class Popup {
 
   public:
     WINDOW* m_win;
+    int m_winWidth;
+    int m_winHeight;
 
   private:
     std::string m_text;
     std::vector<std::vector<Tile>>* m_board;
-    int m_winWidth;
-    int m_winHeight;
 };
 
 namespace SelectMenu {
@@ -38,8 +38,10 @@ struct Option {
     const int* value;
 };
 
-int menu(WINDOW* win, int row, const int column, const std::vector<Option> options, const int highlightedOption);
-int menu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
+int verticalMenu(WINDOW* win, int row, const int column, const std::vector<Option> options, const int highlightedOption);
+int verticalMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
+int horizontalMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
+
 } // namespace SelectMenu
 
 #endif // POPUP_H
