@@ -16,6 +16,7 @@
 void editField(std::string name, int* variable, std::pair<int, int> range);
 void editOptions(App* appConfig, const int row, const int column);
 void showHelp(const int row, const int column);
+void showAbout(const int row, const int column);
 
 void colors() {
     init_pair(2, -1, COLOR_WHITE);
@@ -66,7 +67,7 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
     }
     refresh();
     while (true) {
-        const int selectedOption = SelectMenu::verticalMenu(stdscr, 8, 1, {"Set options", "Help", "", "Start Playing", "Exit"}, 3);
+        const int selectedOption = SelectMenu::verticalMenu(stdscr, 8, 1, {"Set options", "Help", "About", "", "Start Playing", "Exit"}, 4);
 
         switch (selectedOption) {
             case 0:
@@ -77,16 +78,28 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
                 showHelp(7, 1);
                 break;
 
-            case 3:
+            case 2:
+                showAbout(7, 1);
+                break;
+
+            case 4:
                 clear();
                 refresh();
                 return welcomeScreenReturn::Play;
 
-            case 4:
+            case 5:
                 return welcomeScreenReturn::Exit;
         }
     }
     return welcomeScreenReturn::Play;
+}
+
+// min, max both inclusive
+int randomNumber(const int min, const int max) {
+    std::random_device r;
+    std::default_random_engine eng(r());
+    std::uniform_int_distribution<int> uniform_dist(min, max);
+    return uniform_dist(eng);
 }
 
 void editField(std::string name, int* variable, std::pair<int, int> range) {
@@ -159,20 +172,40 @@ void editOptions(App* appConfig, const int row, const int column) {
 }
 
 void showHelp(const int row, const int column) {
-    Popup popup = Popup(row, column, 8, 40);
-    popup.setTitle("Help");
-    mvwprintw(popup.m_win, 1, 1, "This is my Help");
-    mvwprintw(popup.m_win, 2, 1, "Use Arrows To move");
-    mvwprintw(popup.m_win, 6, 1, "press any key to exit");
-    wrefresh(popup.m_win);
+    Popup popup = Popup(row, column, 17, 55);
+    popup.setTitle("2048 Help");
+    mvwprintw(popup.m_win, 1, 1, "2048 is a game about sliding tiles on a grid");
+    mvwprintw(popup.m_win, 2, 1, "to combine them to make a higher value tile");
+    mvwprintw(popup.m_win, 3, 1, "The objective is to create a tile with the value 2048");
+    wattron(popup.m_win, A_BOLD);
+    mvwprintw(popup.m_win, 5, 1, "How to play:");
+    wattroff(popup.m_win, A_BOLD);
+    mvwprintw(popup.m_win, 6, 1, "Use arrow keys or WSAD to move the tiles");
+    mvwprintw(popup.m_win, 7, 1, "You can exit by pressing the 'c' or 'q' key");
+    wattron(popup.m_win, A_BOLD);
+    mvwprintw(popup.m_win, 8, 1, "Options: ");
+    wattroff(popup.m_win, A_BOLD);
+    mvwprintw(popup.m_win, 9, 1, "In the welcome screen, you can set some options,");
+    mvwprintw(popup.m_win, 10, 1, "under the Set Options menu.");
+    mvwprintw(popup.m_win, 11, 1, "Options can be also set by command line arguments,");
+    mvwprintw(popup.m_win, 12, 1, "you can see all of the arguments by passing ");
+    mvwprintw(popup.m_win, 13, 1, "the '--help' option.");
+    mvwprintw(popup.m_win, 15, 1, "Press any key to exit the help");
 
+    wrefresh(popup.m_win);
     getch();
 }
 
-// min, max both inclusive
-int randomNumber(const int min, const int max) {
-    std::random_device r;
-    std::default_random_engine eng(r());
-    std::uniform_int_distribution<int> uniform_dist(min, max);
-    return uniform_dist(eng);
+void showAbout(const int row, const int column) {
+    Popup popup = Popup(row, column, 8, 56);
+    popup.setTitle("2048 Help");
+    mvwprintw(popup.m_win, 1, 1, "Clone of the game 2048, played in terminal");
+    mvwprintw(popup.m_win, 2, 1, "Autor: Alex Cizinsky - https://www.github.com/zalesyc");
+    mvwprintw(popup.m_win, 3, 1, "Licence: GPLv3");
+    mvwprintw(popup.m_win, 3, 1, "Source Code: https://github.com/zalesyc/terminal-2048");
+
+    mvwprintw(popup.m_win, 6, 1, "Press any key to exit the the about text");
+
+    wrefresh(popup.m_win);
+    getch();
 }
