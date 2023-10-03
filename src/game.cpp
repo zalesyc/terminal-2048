@@ -52,7 +52,6 @@ void boardInit(Board* board, App* appConfig) {
 }
 
 welcomeScreenReturn welcomeScreen(App* appConfig) {
-    // TODO: show options on the right
     clear();
     const std::array<std::string, 6> asciiText = {
         R"( ___   ___  _  _   ___  )",
@@ -65,6 +64,7 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
     for (int i = 0; i < asciiText.size(); i++) {
         mvprintw(i, 0, "%s", asciiText.at(i).c_str());
     }
+    mvprintw(15, 1, "Use arrow keys to move and enter to select the options");
     refresh();
     while (true) {
         const int selectedOption = SelectMenu::verticalMenu(stdscr, 8, 1, {"Set options", "Help", "About", "", "Start Playing", "Exit"}, 4);
