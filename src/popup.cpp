@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+/*
 Popup::Popup(App* appconfig) {
     // calculating the size and position of the popup
     const int rowMargin = appconfig->tileHeigth * ((appconfig->playRows > 6) ? 2 : 0.5);
@@ -16,14 +16,17 @@ Popup::Popup(App* appconfig) {
     const int width = (appconfig->playCollumns * appconfig->tileWidth) - colMargin;
     const int height = (appconfig->playRows * appconfig->tileHeigth) - rowMargin;
     this->drawWindow(row, column, height, width);
-}
+}*/
 
 Popup::Popup(const int row, const int column, const int height, const int width) {
     this->drawWindow(row, column, height, width);
 }
 
 Popup::~Popup() {
-    this->setText(std::string(m_text.length(), ' '));
+    this->delWindow();
+}
+
+void Popup::delWindow() {
     werase(m_win);
     wrefresh(m_win);
     delwin(m_win);

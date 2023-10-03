@@ -129,16 +129,16 @@ int main(int argc, const char* argv[]) {
                     if (tile.value == 0) {
                         noZero = false;
                     } else if (tile.value == 2048 && !alreadyWon) {
-                        {
-                            Popup winPopup(&app);
-                            winPopup.setText("YOU WON !");
+                        Popup winPopup(2, 2, 10, 40);
+                        winPopup.setText("YOU WON !");
 
-                            int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
-                            if (option == 0) {
-                                endwin();
-                                return 0;
-                            }
+                        int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
+                        if (option == 0) {
+                            clear();
+                            endwin();
+                            return 0;
                         }
+                        winPopup.delWindow();
                         board.redrawAll();
                         alreadyWon = true;
                         continue;
@@ -163,7 +163,7 @@ int main(int argc, const char* argv[]) {
                 }
 
                 if (end) {
-                    Popup lostPopup(&app);
+                    Popup lostPopup(2, 2, 10, 40);
                     lostPopup.setText("YOU LOST !");
                     while (getch() != 'c') {
                     }

@@ -11,11 +11,12 @@
 class Popup {
   public:
     Popup(const int row, const int column, const int height, const int width);
-    Popup(App* appconfig);
+//    Popup(App* appconfig);
     ~Popup();
 
     void setText(std::string text);
     void setTitle(std::string text);
+    void delWindow();
 
   private:
     std::string print(int width);
@@ -28,7 +29,6 @@ class Popup {
 
   private:
     std::string m_text;
-    std::vector<std::vector<Tile>>* m_board;
 };
 
 namespace SelectMenu {
