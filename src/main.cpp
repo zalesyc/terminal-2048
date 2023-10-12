@@ -59,7 +59,6 @@ int main(int argc, const char* argv[]) {
     if (app.useColor) {
         start_color();
         use_default_colors();
-
         colors();
     }
     // end of inits
@@ -81,17 +80,16 @@ int main(int argc, const char* argv[]) {
     Board board(app.playRows, app.playCollumns);
     boardInit(&board, &app);
 
-    bool gameIsRunning = 1;
+    // game loop
     bool alreadyWon = false;
-
-    while (gameIsRunning) // game loop
-    {
+    while (true) {
         int action = getch();
         Board::moveReturn returnMsg;
         switch (action) {
-            case (int)'c':
-            case (int)'C':
-                gameIsRunning = 0;
+            case 'c':
+            case 'C':
+            case 'Q':
+            case 'q':
                 endwin();
                 return 0;
                 break;
@@ -122,19 +120,20 @@ int main(int argc, const char* argv[]) {
         }
 
         if (returnMsg == Board::moveReturn::Ok) {
-            bool noZero = true;
+            bool noZeroInBoard = true;
             for (auto& row : board) {
                 for (Tile& tile : row) {
                     tile.addRandTwos(app.moveProbability);
                     if (tile.value == 0) {
-                        noZero = false;
+                        noZeroInBoard = false;
                     } else if (tile.value == 2048 && !alreadyWon) {
+                        // win popup
                         Popup winPopup(2, 2, 10, 40);
                         winPopup.setText("YOU WON !");
-
                         int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
                         if (option == 0) {
                             clear();
+                            refresh();
                             endwin();
                             return 0;
                         }
@@ -146,23 +145,9 @@ int main(int argc, const char* argv[]) {
                 }
             }
 
-            if (noZero) {
-                bool end = true;
-                for (int row = 0; row < board.size(); row++) {
-                    for (int coll = 0; coll < board.at(row).size(); coll++) {
-                        if (coll != board.at(row).size() - 1 && board.at(row).at(coll + 1).value == board.at(row).at(coll).value) {
-                            end = false;
-                        } else if (coll != 0 && board.at(row).at(coll - 1).value == board.at(row).at(coll).value) {
-                            end = false;
-                        } else if (row != board.size() - 1 && board.at(row + 1).at(coll).value == board.at(row).at(coll).value) {
-                            end = false;
-                        } else if (row != 0 && board.at(row - 1).at(coll).value == board.at(row).at(coll).value) {
-                            end = false;
-                        }
-                    }
-                }
-
-                if (end) {
+            if (noZeroInBoard) {
+                if (gameLost(&board)) {
+                    // lose popup
                     Popup lostPopup(2, 2, 10, 40);
                     lostPopup.setText("YOU LOST !");
                     while (getch() != 'c') {

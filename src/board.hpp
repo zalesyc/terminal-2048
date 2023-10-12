@@ -2,7 +2,6 @@
 #define BOARD_H
 
 #include "tile.hpp"
-#include <iostream>
 #include <ncurses.h>
 #include <vector>
 

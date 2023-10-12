@@ -5,13 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "game.hpp"
-#include "tile.hpp"
-
 class Popup {
   public:
     Popup(const int row, const int column, const int height, const int width);
-//    Popup(App* appconfig);
     ~Popup();
 
     void setText(std::string text);

@@ -1,6 +1,5 @@
 #include <array>
 #include <cctype>
-#include <iostream>
 #include <ncurses.h>
 #include <ncurses/curses.h>
 #include <random>
@@ -11,7 +10,6 @@
 #include "board.hpp"
 #include "game.hpp"
 #include "popup.hpp"
-#include "tile.hpp"
 
 void editField(std::string name, int* variable, std::pair<int, int> range);
 void editOptions(App* appConfig, const int row, const int column);
@@ -100,6 +98,29 @@ int randomNumber(const int min, const int max) {
     std::default_random_engine eng(r());
     std::uniform_int_distribution<int> uniform_dist(min, max);
     return uniform_dist(eng);
+}
+
+bool gameLost(Board* board) {
+    for (int row = 0; row < board->size(); row++) {
+        for (int coll = 0; coll < board->at(row).size(); coll++) {
+            if (coll != board->at(row).size() - 1 && board->at(row).at(coll + 1).value == board->at(row).at(coll).value) {
+                return false;
+            }
+
+            if (coll != 0 && board->at(row).at(coll - 1).value == board->at(row).at(coll).value) {
+                return false;
+            }
+
+            if (row != board->size() - 1 && board->at(row + 1).at(coll).value == board->at(row).at(coll).value) {
+                return false;
+            }
+
+            if (row != 0 && board->at(row - 1).at(coll).value == board->at(row).at(coll).value) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void editField(std::string name, int* variable, std::pair<int, int> range) {

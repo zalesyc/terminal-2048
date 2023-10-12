@@ -1,9 +1,6 @@
 #ifndef APP_H
 #define APP_H
 
-#include <cstdlib>
-#include <vector>
-
 #include "board.hpp"
 
 struct App { // defalut options, non const variables may be overwritten
@@ -25,5 +22,6 @@ void colors();
 void boardInit(Board* board, App* appConfig);
 welcomeScreenReturn welcomeScreen(App* appConfig);
 int randomNumber(const int min, const int max);
+bool gameLost(Board* board);
 
 #endif // APP_H
