@@ -46,6 +46,18 @@ void boardInit(Board* board, App* appConfig) {
         }
     }
     board->populateWithRandomTwos();
+#if 1
+    int testBoard[4][4] = {
+        {0, 0, 0, 2},
+        {0, 2, 0, 0},
+        {2, 0, 0, 2},
+        {2, 0, 0, 0}};
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            board->get(row, col).setValue(testBoard[row][col], true);
+        }
+    }
+#endif
     refresh();
 }
 

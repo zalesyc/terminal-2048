@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <iostream>
 #include <memory>
+#include <queue>
 #include <vector>
 
 #include "board.hpp"
@@ -15,7 +15,57 @@ Board::Board(const int rows, const int columns)
       m_rows(rows),
       m_columns(columns) {}
 
+#if 1
 Board::moveReturn Board::Move(Board::moveDirection direction) {
+    switch (direction) {
+        case Board::moveDirection::Up: {
+        }
+
+        case Board::moveDirection::Down: {
+            for (int col = 0; col < this->m_columns; col++) {
+                int waitingFor = 0;
+                Tile* moveToOnWaiting;
+                std::queue<Tile*> freeTiles;
+                for (int row = this->m_rows - 1; row >= 0; row--) {
+                    if (this->get(row, col).value == 0) {
+                        freeTiles.push(&get(row, col));
+                        continue;
+                    }
+
+                    if (this->get(row, col).value == waitingFor) {
+                        waitingFor = 0;
+                        moveToOnWaiting->setValue(moveToOnWaiting->value * 2);
+                        this->get(row, col).setValue(0);
+                        freeTiles.push(&get(row, col));
+                        continue;
+                    }
+
+                    waitingFor = this->get(row, col).value;
+
+                    if (!freeTiles.empty()) {
+                        freeTiles.front()->setValue(this->get(row, col).value);
+                        moveToOnWaiting = freeTiles.front();
+                        freeTiles.pop();
+                        this->get(row, col).setValue(0);
+                        continue;
+                    }
+
+                    moveToOnWaiting = &this->get(row, col);
+                }
+            }
+            refresh();
+        }
+
+        case Board::moveDirection::Left: {
+        }
+
+        case Board::moveDirection::Right: {
+        }
+    }
+    return Board::moveReturn::NoneMoved;
+}
+#else
+Board::moveReturn Board::Move(Board::moveDirection direction) { // old algoritmh
     switch (direction) {
         case Board::moveDirection::Up: {
             bool anyMoved = false;
@@ -123,6 +173,8 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
     }
     return Board::moveReturn::NoneMoved;
 }
+
+#endif
 
 Tile& Board::get(const int row, const int column) {
     return this->at(row).at(column);
