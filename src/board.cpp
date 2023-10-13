@@ -15,166 +15,79 @@ Board::Board(const int rows, const int columns)
       m_rows(rows),
       m_columns(columns) {}
 
-#if 1
 Board::moveReturn Board::Move(Board::moveDirection direction) {
     switch (direction) {
         case Board::moveDirection::Up: {
+            for (int col = 0; col < this->m_columns; col++) {
+                Board::SingleTileMoveData singleTileMoveData;
+                for (int row = 0; row < this->m_rows; row++) {
+                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                }
+            }
+            refresh();
+            break;
         }
 
         case Board::moveDirection::Down: {
             for (int col = 0; col < this->m_columns; col++) {
-                int waitingFor = 0;
-                Tile* moveToOnWaiting;
-                std::queue<Tile*> freeTiles;
+                Board::SingleTileMoveData singleTileMoveData;
                 for (int row = this->m_rows - 1; row >= 0; row--) {
-                    if (this->get(row, col).value == 0) {
-                        freeTiles.push(&get(row, col));
-                        continue;
-                    }
-
-                    if (this->get(row, col).value == waitingFor) {
-                        waitingFor = 0;
-                        moveToOnWaiting->setValue(moveToOnWaiting->value * 2);
-                        this->get(row, col).setValue(0);
-                        freeTiles.push(&get(row, col));
-                        continue;
-                    }
-
-                    waitingFor = this->get(row, col).value;
-
-                    if (!freeTiles.empty()) {
-                        freeTiles.front()->setValue(this->get(row, col).value);
-                        moveToOnWaiting = freeTiles.front();
-                        freeTiles.pop();
-                        this->get(row, col).setValue(0);
-                        continue;
-                    }
-
-                    moveToOnWaiting = &this->get(row, col);
+                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
                 }
             }
             refresh();
+            break;
         }
 
         case Board::moveDirection::Left: {
+            for (int row = 0; row < this->m_rows; row++) {
+                Board::SingleTileMoveData singleTileMoveData;
+                for (int col = 0; col < this->m_rows; col++) {
+                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                }
+            }
+            refresh();
+            break;
         }
 
         case Board::moveDirection::Right: {
+            for (int row = 0; row < this->m_rows; row++) {
+                Board::SingleTileMoveData singleTileMoveData;
+                for (int col = this->m_columns - 1; col >= 0; col--) {
+                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                }
+            }
+            refresh();
+            break;
         }
     }
-    return Board::moveReturn::NoneMoved;
+    return Board::moveReturn::Ok;
 }
-#else
-Board::moveReturn Board::Move(Board::moveDirection direction) { // old algoritmh
-    switch (direction) {
-        case Board::moveDirection::Up: {
-            bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_rows]());
-            // TODO: rename coll to col
-            for (int coll = 0; coll < m_columns; coll++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_rows, 0);
-                for (int stage = 0; stage < m_rows; stage++) {
-                    bool firstIter = true;
-                    for (int row = 0; row < m_rows; row++) {
-                        if (row < m_rows - 1) {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[row],
-                                           &this->get(row + 1, coll),
-                                           &alreadyMergedTiles[row + 1]);
-                        } else {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[row]);
-                        }
-                    }
-                }
-            }
-            return (anyMoved) ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
-        }
 
-        case Board::moveDirection::Down: {
-            bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_rows]());
-
-            for (int coll = 0; coll < m_columns; coll++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_rows, 0);
-                for (int stage = 0; stage < m_rows; stage++) {
-                    bool firstIter = true;
-                    for (int row = m_rows - 1; row >= 0; row--) {
-                        if (row > 0) {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[row],
-                                           &this->get(row - 1, coll),
-                                           &alreadyMergedTiles[row - 1]);
-                        } else {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[row]);
-                        }
-                    }
-                }
-            }
-            return (anyMoved) ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
-        }
-
-        case Board::moveDirection::Left: {
-            bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_columns]());
-
-            for (int row = 0; row < m_rows; row++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_columns, 0);
-                for (int stage = 0; stage < m_columns; stage++) {
-                    bool firstIter = true;
-                    for (int coll = 0; coll < m_columns; coll++) {
-                        if (coll < m_columns - 1) {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[coll],
-                                           &this->get(row, coll + 1),
-                                           &alreadyMergedTiles[coll + 1]);
-                        } else {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[coll]);
-                        }
-                    }
-                }
-            }
-            return (anyMoved) ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
-        }
-
-        case Board::moveDirection::Right: {
-            bool anyMoved = false;
-            std::unique_ptr<bool[]> alreadyMergedTiles(new bool[m_columns]());
-
-            for (int row = 0; row < m_rows; row++) {
-                std::fill(alreadyMergedTiles.get(), alreadyMergedTiles.get() + m_columns, 0);
-                for (int stage = 0; stage < m_columns; stage++) {
-                    bool firstIter = true;
-                    for (int coll = m_columns - 1; coll >= 0; coll--) {
-                        if (coll > 0) {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[coll],
-                                           &this->get(row, coll - 1),
-                                           &alreadyMergedTiles[coll - 1]);
-                        } else {
-                            singleTileMove(&anyMoved,
-                                           &firstIter, &this->get(row, coll),
-                                           &alreadyMergedTiles[coll]);
-                        }
-                    }
-                }
-            }
-            return (anyMoved) ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
-        }
+void Board::singleTileMove_newAlg(Board::SingleTileMoveData* data, Tile& currentTile) {
+    if (currentTile.value == 0) {
+        data->freeTiles.push(&currentTile);
+        return;
     }
-    return Board::moveReturn::NoneMoved;
-}
 
-#endif
+    if (currentTile.value == data->waitingFor) {
+        data->waitingFor = 0;
+        data->waiter->setValue(data->waiter->value * 2);
+        currentTile.setValue(0);
+        data->freeTiles.push(&currentTile);
+        return;
+    }
+
+    data->waitingFor = currentTile.value;
+    if (!data->freeTiles.empty()) {
+        data->freeTiles.front()->setValue(currentTile.value);
+        data->waiter = data->freeTiles.front();
+        data->freeTiles.pop();
+        currentTile.setValue(0);
+        return;
+    }
+    data->waiter = &currentTile;
+}
 
 Tile& Board::get(const int row, const int column) {
     return this->at(row).at(column);

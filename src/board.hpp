@@ -1,9 +1,10 @@
 #ifndef BOARD_H
 #define BOARD_H
+#include <ncurses.h>
+#include <queue>
+#include <vector>
 
 #include "tile.hpp"
-#include <ncurses.h>
-#include <vector>
 
 class Board : public std::vector<std::vector<Tile>> {
   public:
@@ -25,6 +26,15 @@ class Board : public std::vector<std::vector<Tile>> {
   private:
     const int m_rows;
     const int m_columns;
+
+    struct SingleTileMoveData {
+        int waitingFor = 0;
+        Tile* waiter;
+        std::queue<Tile*> freeTiles;
+    };
+
+  private:
+    void singleTileMove_newAlg(SingleTileMoveData* data, Tile& currentTile);
 };
 
 #endif // BOARD_H
