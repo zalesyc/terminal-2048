@@ -34,7 +34,7 @@ class Board : public std::vector<std::vector<Tile>> {
     };
 
   private:
-    void singleTileMove_newAlg(SingleTileMoveData* data, Tile& currentTile);
+    void singleTileMove(SingleTileMoveData* data, Tile& currentTile);
 };
 
 #endif // BOARD_H

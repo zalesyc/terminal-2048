@@ -1,14 +1,9 @@
-#include <algorithm>
-#include <memory>
 #include <queue>
 #include <vector>
 
 #include "board.hpp"
 #include "game.hpp"
 #include "tile.hpp"
-
-void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond);
-void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr); // overload for last rows
 
 Board::Board(const int rows, const int columns)
     : std::vector<std::vector<Tile>>(rows, std::vector<Tile>(columns)),
@@ -21,7 +16,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
             for (int col = 0; col < this->m_columns; col++) {
                 Board::SingleTileMoveData singleTileMoveData;
                 for (int row = 0; row < this->m_rows; row++) {
-                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                    this->singleTileMove(&singleTileMoveData, this->get(row, col));
                 }
             }
             refresh();
@@ -32,7 +27,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
             for (int col = 0; col < this->m_columns; col++) {
                 Board::SingleTileMoveData singleTileMoveData;
                 for (int row = this->m_rows - 1; row >= 0; row--) {
-                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                    this->singleTileMove(&singleTileMoveData, this->get(row, col));
                 }
             }
             refresh();
@@ -43,7 +38,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
             for (int row = 0; row < this->m_rows; row++) {
                 Board::SingleTileMoveData singleTileMoveData;
                 for (int col = 0; col < this->m_rows; col++) {
-                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                    this->singleTileMove(&singleTileMoveData, this->get(row, col));
                 }
             }
             refresh();
@@ -54,7 +49,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
             for (int row = 0; row < this->m_rows; row++) {
                 Board::SingleTileMoveData singleTileMoveData;
                 for (int col = this->m_columns - 1; col >= 0; col--) {
-                    this->singleTileMove_newAlg(&singleTileMoveData, this->get(row, col));
+                    this->singleTileMove(&singleTileMoveData, this->get(row, col));
                 }
             }
             refresh();
@@ -64,7 +59,7 @@ Board::moveReturn Board::Move(Board::moveDirection direction) {
     return Board::moveReturn::Ok;
 }
 
-void Board::singleTileMove_newAlg(Board::SingleTileMoveData* data, Tile& currentTile) {
+void Board::singleTileMove(Board::SingleTileMoveData* data, Tile& currentTile) {
     if (currentTile.value == 0) {
         data->freeTiles.push(&currentTile);
         return;
@@ -108,29 +103,5 @@ void Board::populateWithRandomTwos() {
     const int tilesToPopulate = randomNumber(minTilesToPopulate, maxTilesToPopulate);
     for (int i = 0; i < tilesToPopulate; i++) {
         this->at(randomNumber(0, m_rows - 1)).at(randomNumber(0, m_columns - 1)).setValue(2);
-    }
-}
-
-// normal
-void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr, Tile* secondTile, bool* wasMergedSecond) {
-    if ((mainTile->value == 0 || !(*firstIter))) { // moving
-        *firstIter = false;
-        mainTile->setValue(secondTile->value);
-        if (mainTile->value > 0) {
-            *moved = true;
-        }
-    } else if (mainTile->value == secondTile->value && (!(*wasMergedCurr)) && (!(*wasMergedSecond))) { // merging
-        *firstIter = false;
-        mainTile->setValue(mainTile->value * 2);
-        *wasMergedCurr = true;
-        *moved = true;
-    }
-}
-
-// last row/collumn
-void singleTileMove(bool* moved, bool* firstIter, Tile* mainTile, bool* wasMergedCurr) {
-    if (mainTile->value == 0 || !(*firstIter)) {
-        *firstIter = false;
-        mainTile->setValue(0);
     }
 }
