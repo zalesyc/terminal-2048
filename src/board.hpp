@@ -10,15 +10,14 @@ class Board : public std::vector<std::vector<Tile>> {
   public:
     Board(const int rows, const int columns);
 
-    enum moveDirection { Left,
-                         Right,
-                         Up,
-                         Down };
     enum moveReturn { Ok,
                       NoneMoved,
                       GameLost };
 
-    moveReturn Move(moveDirection direction);
+    moveReturn moveLeft();
+    moveReturn moveRight();
+    moveReturn moveUp();
+    moveReturn moveDown();
     Tile& get(const int row, const int column);
     void redrawAll();
     void populateWithRandomTwos();

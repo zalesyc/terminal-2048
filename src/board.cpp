@@ -10,54 +10,51 @@ Board::Board(const int rows, const int columns)
       m_rows(rows),
       m_columns(columns) {}
 
-Board::moveReturn Board::Move(Board::moveDirection direction) {
+Board::moveReturn Board::moveLeft() {
     bool wasMoved = false;
-    switch (direction) {
-        case Board::moveDirection::Up: {
-            for (int col = 0; col < this->m_columns; col++) {
-                Board::SingleTileMoveData singleTileMoveData;
-                for (int row = 0; row < this->m_rows; row++) {
-                    this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
-                }
-            }
-            refresh();
-            break;
-        }
-
-        case Board::moveDirection::Down: {
-            for (int col = 0; col < this->m_columns; col++) {
-                Board::SingleTileMoveData singleTileMoveData;
-                for (int row = this->m_rows - 1; row >= 0; row--) {
-                    this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
-                }
-            }
-            refresh();
-            break;
-        }
-
-        case Board::moveDirection::Left: {
-            for (int row = 0; row < this->m_rows; row++) {
-                Board::SingleTileMoveData singleTileMoveData;
-                for (int col = 0; col < this->m_rows; col++) {
-                    this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
-                }
-            }
-            refresh();
-            break;
-        }
-
-        case Board::moveDirection::Right: {
-            for (int row = 0; row < this->m_rows; row++) {
-                Board::SingleTileMoveData singleTileMoveData;
-                for (int col = this->m_columns - 1; col >= 0; col--) {
-                    this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
-                }
-            }
-            refresh();
-            break;
+    for (int row = 0; row < this->m_rows; row++) {
+        Board::SingleTileMoveData singleTileMoveData;
+        for (int col = 0; col < this->m_rows; col++) {
+            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
         }
     }
+    refresh();
+    return wasMoved ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
+}
 
+Board::moveReturn Board::moveRight() {
+    bool wasMoved = false;
+    for (int row = 0; row < this->m_rows; row++) {
+        Board::SingleTileMoveData singleTileMoveData;
+        for (int col = this->m_columns - 1; col >= 0; col--) {
+            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+        }
+    }
+    refresh();
+    return wasMoved ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
+}
+
+Board::moveReturn Board::moveUp() {
+    bool wasMoved = false;
+    for (int col = 0; col < this->m_columns; col++) {
+        Board::SingleTileMoveData singleTileMoveData;
+        for (int row = 0; row < this->m_rows; row++) {
+            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+        }
+    }
+    refresh();
+    return wasMoved ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
+}
+
+Board::moveReturn Board::moveDown() {
+    bool wasMoved = false;
+    for (int col = 0; col < this->m_columns; col++) {
+        Board::SingleTileMoveData singleTileMoveData;
+        for (int row = this->m_rows - 1; row >= 0; row--) {
+            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+        }
+    }
+    refresh();
     return wasMoved ? Board::moveReturn::Ok : Board::moveReturn::NoneMoved;
 }
 
