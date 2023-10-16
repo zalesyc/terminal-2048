@@ -78,6 +78,7 @@ void Board::singleTileMove(Board::SingleTileMoveData* data, Tile& currentTile, b
         data->freeTiles.front()->setValue(currentTile.value);
         data->waiter = data->freeTiles.front();
         data->freeTiles.pop();
+        data->freeTiles.push(&currentTile);
         currentTile.setValue(0);
         *wasMoved = true;
         return;
