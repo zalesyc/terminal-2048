@@ -5,16 +5,16 @@
 #include <utility>
 #include <vector>
 
-class argumentParser {
+class ArgumentParser {
   public:
-    argumentParser(int argc, char const* argv[]);
-    std::pair<bool, std::string> getOption(const std::string option);
-    bool optionExists(const std::string option);
-    bool setIntToOption(const std::string option, int* variableToBeSet, const std::pair<int, int> range);
+    ArgumentParser(int argc, char const* argv[]);
+    std::pair<bool, std::string> getOption(const std::string& option);
+    bool optionExists(const std::string& option);
+    bool setIntToOption(const std::string& option, int* variableToBeSet, const std::pair<int, int>& range);
 
   private:
     std::vector<std::string> m_args;
-    bool isNumber(const std::string string);
+    static bool isNumber(const std::string& string);
 };
 
 #endif // ARGUMENTPARSER_H

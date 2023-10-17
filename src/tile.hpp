@@ -1,23 +1,22 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include <ncurses.h>
+#include <ncurses/curses.h>
 #include <string>
 
 class Tile {
   public:
     WINDOW* window;
+    int value;
     int width;
     int heigth;
-
-    int value;
     void setValue(int newValue);
     void setValue(int newValue, bool redraw);
     void drawLabel();
-    void addRandTwos(const char probability);
+    void addRandTwos(int probability);
 
   private:
-    std::string print(int width);
+    std::string print(int width) const;
 };
 
 #endif

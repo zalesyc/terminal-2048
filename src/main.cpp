@@ -1,5 +1,5 @@
 #include <iostream>
-#include <ncurses.h>
+#include <ncurses/curses.h>
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,20 +15,30 @@ int main(int argc, const char* argv[]) {
     App app;
 
     // commandline arguments
-    argumentParser argParser(argc, argv); // I cannot declare it in the if statement, because it is a different scope
+    ArgumentParser argParser(argc, argv); // I cannot declare it in the if statement, because it is a different scope
     if (argc > 1) {
-        if (!argParser.setIntToOption("-r", &app.playRows, {3, 100}))
+        if (!argParser.setIntToOption("-r", &app.playRows, {3, 100})) {
             return 0;
-        if (!argParser.setIntToOption("--rows", &app.playRows, {3, 100}))
+        }
+        if (!argParser.setIntToOption("--rows", &app.playRows, {3, 100})) {
             return 0;
-        if (!argParser.setIntToOption("-c", &app.playCollumns, {3, 100}))
+        }
+
+        if (!argParser.setIntToOption("-c", &app.playColumns, {3, 100})) {
             return 0;
-        if (!argParser.setIntToOption("--columns", &app.playCollumns, {3, 100}))
+        }
+
+        if (!argParser.setIntToOption("--columns", &app.playColumns, {3, 100})) {
             return 0;
-        if (!argParser.setIntToOption("--tile-width", &app.tileWidth, {5, 15}))
+        }
+
+        if (!argParser.setIntToOption("--tile-width", &app.tileWidth, {5, 15})) {
             return 0;
-        if (!argParser.setIntToOption("--tile-height", &app.tileHeigth, {3, 10}))
+        }
+
+        if (!argParser.setIntToOption("--tile-height", &app.tileHeigth, {3, 10})) {
             return 0;
+        }
 
         if (argParser.optionExists("--help")) {
             std::cout << "Usage: terminal-2048 [options] \n\nOptions: \n"
@@ -77,14 +87,14 @@ int main(int argc, const char* argv[]) {
     mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
-    Board board(app.playRows, app.playCollumns);
+    Board board(app.playRows, app.playColumns);
     boardInit(&board, &app);
 
     // game loop
     bool alreadyWon = false;
     while (true) {
         int action = getch();
-        Board::moveReturn returnMsg;
+        Board::moveReturn returnMsg = Board::moveReturn::NoneMoved;
         switch (action) {
             case 'c':
             case 'C':

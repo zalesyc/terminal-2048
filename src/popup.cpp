@@ -1,8 +1,9 @@
-#include "popup.hpp"
 #include <cmath>
 #include <ncurses/curses.h>
 #include <string>
 #include <vector>
+
+#include "popup.hpp"
 
 Popup::Popup(const int row, const int column, const int height, const int width) {
     this->drawWindow(row, column, height, width);
@@ -12,19 +13,19 @@ Popup::~Popup() {
     this->delWindow();
 }
 
-void Popup::delWindow() {
+void Popup::delWindow() const {
     werase(m_win);
     wrefresh(m_win);
     delwin(m_win);
 }
 
-void Popup::setText(std::string text) {
-    m_text = text;
+void Popup::setText(const std::string& text) {
+    this->m_text = text;
     mvwprintw(m_win, std::ceil((m_winHeight / 2.0) - 1), 1, "%s", this->print(m_winWidth - 2).c_str());
     wrefresh(m_win);
 }
 
-void Popup::setTitle(std::string text) {
+void Popup::setTitle(const std::string& text) const {
     mvwprintw(this->m_win, 0, 0, "%s", text.c_str());
     wrefresh(this->m_win);
 }
@@ -50,12 +51,12 @@ void Popup::drawWindow(const int row, const int column, const int height, const 
     refresh();
 }
 
-int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::vector<SelectMenu::Option> options, const int highlightedOption) {
+int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::vector<SelectMenu::Option>& options, const int highlightedOption) {
     int choice = highlightedOption;
 
-    while (1) {
+    while (true) {
+        constexpr int ENTER = 10;
         // Print the menu
-
         for (int i = 0; i < options.size(); i++) {
             if (i == choice) {
                 wattron(win, A_REVERSE); // Highlight the current choice
@@ -69,10 +70,7 @@ int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::
         }
         wrefresh(win);
 
-        // Get user input
-        int c = getch();
-
-        switch (c) {
+        switch (getch()) {
             case KEY_UP:
                 choice = (choice - 1 + options.size()) % options.size();
                 if (options.at(choice).name.empty()) {
@@ -85,18 +83,18 @@ int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::
                     choice = (choice + 1) % options.size();
                 }
                 break;
-            case 10: // Enter key
+            case ENTER: 
                 return choice;
         }
     }
 }
 
-int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption) {
+int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::vector<std::string>& options, const int highlightedOption) {
     int choice = highlightedOption;
 
-    while (1) {
+    while (true) {
+        constexpr int ENTER = 10;
         // Print the menu
-
         for (int i = 0; i < options.size(); i++) {
             if (i == choice) {
                 wattron(win, A_REVERSE); // Highlight the current choice
@@ -106,10 +104,7 @@ int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::
         }
         wrefresh(win);
 
-        // Get user input
-        int c = getch();
-
-        switch (c) {
+        switch (getch()) {
             case KEY_UP:
                 choice = (choice - 1 + options.size()) % options.size();
                 if (options.at(choice).empty()) {
@@ -122,16 +117,17 @@ int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::
                     choice = (choice + 1) % options.size();
                 }
                 break;
-            case 10: // Enter key
+            case ENTER: // Enter key
                 return choice;
         }
     }
 }
 
-int SelectMenu::horizontalMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption) {
+int SelectMenu::horizontalMenu(WINDOW* win, int row, const int column, const std::vector<std::string>& options, const int highlightedOption) {
     int choice = highlightedOption;
 
-    while (1) {
+    while (true) {
+        constexpr int ENTER = 10;
         // Print the menu
         for (int i = 0; i < options.size(); i++) {
             if (i == choice) {
@@ -142,10 +138,7 @@ int SelectMenu::horizontalMenu(WINDOW* win, int row, const int column, const std
         }
         wrefresh(win);
 
-        // Get user input
-        int c = getch();
-
-        switch (c) {
+        switch (getch()) {
             case KEY_LEFT:
                 choice = (choice - 1 + options.size()) % options.size();
                 if (options.at(choice).empty()) {
@@ -158,7 +151,7 @@ int SelectMenu::horizontalMenu(WINDOW* win, int row, const int column, const std
                     choice = (choice + 1) % options.size();
                 }
                 break;
-            case 10: // Enter key
+            case ENTER: // Enter key
                 return choice;
         }
     }

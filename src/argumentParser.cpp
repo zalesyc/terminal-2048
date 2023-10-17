@@ -7,20 +7,18 @@
 
 #include "argumentParser.hpp"
 
-argumentParser::argumentParser(int argc, char const* argv[]) {
+ArgumentParser::ArgumentParser(int argc, char const* argv[]) {
     if (argc > 1) {
         for (int i = 1; i < argc; i++) {
-            m_args.push_back(argv[i]);
+            m_args.emplace_back(argv[i]);
         }
     }
-    // else error - no args provided
 }
 
-std::pair<bool, std::string> argumentParser::getOption(const std::string option) {
+std::pair<bool, std::string> ArgumentParser::getOption(const std::string& option) {
     std::vector<std::string>::iterator itr;
     itr = std::find(m_args.begin(), m_args.end(), option);
 
-    // return (itr != m_args.end() && ++itr != m_args.end()) ? *itr : "";
     if (itr == m_args.end()) {
         return std::make_pair(false, "");
     }
@@ -32,11 +30,11 @@ std::pair<bool, std::string> argumentParser::getOption(const std::string option)
     return std::make_pair(true, *itr);
 }
 
-bool argumentParser::optionExists(const std::string option) {
+bool ArgumentParser::optionExists(const std::string& option) {
     return std::find(m_args.begin(), m_args.end(), option) != m_args.end();
 }
 
-bool argumentParser::setIntToOption(const std::string option, int* variableToBeSet, const std::pair<int, int> range) {
+bool ArgumentParser::setIntToOption(const std::string& option, int* variableToBeSet, const std::pair<int, int>& range) {
     std::pair<bool, std::string> argument = this->getOption(option);
 
     if (!argument.first) {
@@ -44,19 +42,19 @@ bool argumentParser::setIntToOption(const std::string option, int* variableToBeS
     }
 
     if (argument.second.empty()) {
-        std::cout << "Unexpected agument: \nMissing number parameter after the " << option << " option" << std::endl;
+        std::cout << "Unexpected agument: \nMissing number parameter after the " << option << " option" << '\n';
         return false;
     }
 
-    if (!this->isNumber(argument.second)) {
-        std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
+    if (!ArgumentParser::isNumber(argument.second)) {
+        std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << '\n';
         return false;
     }
 
     int intArgument = std::stoi(argument.second);
 
     if (intArgument < range.first || intArgument > range.second) {
-        std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << std::endl;
+        std::cout << "Unexpected agument: \nArgument after the " << option << " option must be a positive number between: " << range.first << " and " << range.second << '\n';
         return false;
     }
 
@@ -64,11 +62,6 @@ bool argumentParser::setIntToOption(const std::string option, int* variableToBeS
     return true;
 }
 
-bool argumentParser::isNumber(const std::string string) {
-    for (const char currentChar : string) {
-        if (!std::isdigit(currentChar)) {
-            return false;
-        }
-    }
-    return true;
+bool ArgumentParser::isNumber(const std::string& string) {
+    return std::all_of(string.begin(), string.end(), [](char number) { return std::isdigit(number); });
 }

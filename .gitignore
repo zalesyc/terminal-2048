@@ -5,3 +5,6 @@ build/*
 .vscode
 
 .cache
+
+#file gnerated by cmake for clang-tidy
+compile_commands.json

@@ -1,22 +1,22 @@
 #ifndef POPUP_H
 #define POPUP_H
 
-#include <ncurses.h>
+#include <ncurses/curses.h>
 #include <string>
 #include <vector>
 
 class Popup {
   public:
-    Popup(const int row, const int column, const int height, const int width);
+    Popup(int row, int column, int height, int width);
     ~Popup();
 
-    void setText(std::string text);
-    void setTitle(std::string text);
-    void delWindow();
+    void setText(const std::string& text);
+    void setTitle(const std::string& text) const;
+    void delWindow() const;
 
   private:
     std::string print(int width);
-    void drawWindow(const int topLeftX, const int topLeftY, const int bottomRightX, const int bottomRightY);
+    void drawWindow(int row, int column, int height, int width);
 
   public:
     WINDOW* m_win;
@@ -34,10 +34,9 @@ struct Option {
     const int* value;
 };
 
-int verticalMenu(WINDOW* win, int row, const int column, const std::vector<Option> options, const int highlightedOption);
-int verticalMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
-int horizontalMenu(WINDOW* win, int row, const int column, const std::vector<std::string> options, const int highlightedOption);
-
+int verticalMenu(WINDOW* win, int row, int column, const std::vector<Option>& options, int highlightedOption);
+int verticalMenu(WINDOW* win, int row, int column, const std::vector<std::string>& options, int highlightedOption);
+int horizontalMenu(WINDOW* win, int row, int column, const std::vector<std::string>& options, int highlightedOption);
 } // namespace SelectMenu
 
 #endif // POPUP_H

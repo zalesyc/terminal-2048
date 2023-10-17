@@ -1,6 +1,5 @@
 #include <array>
 #include <cctype>
-#include <ncurses.h>
 #include <ncurses/curses.h>
 #include <random>
 #include <string>
@@ -11,10 +10,10 @@
 #include "game.hpp"
 #include "popup.hpp"
 
-void editField(std::string name, int* variable, std::pair<int, int> range);
-void editOptions(App* appConfig, const int row, const int column);
-void showHelp(const int row, const int column);
-void showAbout(const int row, const int column);
+void editField(std::string& name, int* variable, std::pair<int, int> range);
+void editOptions(App* appConfig, int row, int column);
+void showHelp(int row, int column);
+void showAbout(int row, int column);
 
 void colors() {
     init_pair(2, -1, COLOR_WHITE);
@@ -28,21 +27,20 @@ void colors() {
 
 void boardInit(Board* board, App* appConfig) {
     for (int row = 0; row < appConfig->playRows; row++) {
-        for (int coll = 0; coll < appConfig->playCollumns; coll++) {
-
-            board->at(row).at(coll).window = newwin(appConfig->tileHeigth, appConfig->tileWidth, (row * appConfig->tileHeigth) + appConfig->boardStartingRow, (coll * appConfig->tileWidth) + appConfig->boardStartingCollumn);
-            board->at(row).at(coll).width = appConfig->tileWidth;
-            board->at(row).at(coll).heigth = appConfig->tileHeigth;
-            board->at(row).at(coll).setValue(0, true);
+        for (int col = 0; col < appConfig->playColumns; col++) {
+            board->at(row).at(col).window = newwin(appConfig->tileHeigth, appConfig->tileWidth, (row * appConfig->tileHeigth) + appConfig->boardStartingRow, (col * appConfig->tileWidth) + appConfig->boardStartingColumn);
+            board->at(row).at(col).width = appConfig->tileWidth;
+            board->at(row).at(col).heigth = appConfig->tileHeigth;
+            board->at(row).at(col).setValue(0, true);
 
             if (appConfig->useColor) {
-                wbkgd(board->at(row).at(coll).window,
-                      COLOR_PAIR((board->at(row).at(coll).value <= 128) ? board->at(row).at(coll).value : 128));
+                wbkgd(board->at(row).at(col).window,
+                      COLOR_PAIR((board->at(row).at(col).value <= 128) ? board->at(row).at(col).value : 128));
             } else {
-                box(board->at(row).at(coll).window, 0, 0);
+                box(board->at(row).at(col).window, 0, 0);
             }
 
-            wrefresh(board->at(row).at(coll).window);
+            wrefresh(board->at(row).at(col).window);
         }
     }
     board->populateWithRandomTwos();
@@ -94,28 +92,28 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
 
 // min, max both inclusive
 int randomNumber(const int min, const int max) {
-    std::random_device r;
-    std::default_random_engine eng(r());
+    std::random_device random_device;
+    std::default_random_engine eng(random_device());
     std::uniform_int_distribution<int> uniform_dist(min, max);
     return uniform_dist(eng);
 }
 
 bool gameLost(Board* board) {
     for (int row = 0; row < board->size(); row++) {
-        for (int coll = 0; coll < board->at(row).size(); coll++) {
-            if (coll != board->at(row).size() - 1 && board->at(row).at(coll + 1).value == board->at(row).at(coll).value) {
+        for (int col = 0; col < board->at(row).size(); col++) {
+            if (col != board->at(row).size() - 1 && board->at(row).at(col + 1).value == board->at(row).at(col).value) {
                 return false;
             }
 
-            if (coll != 0 && board->at(row).at(coll - 1).value == board->at(row).at(coll).value) {
+            if (col != 0 && board->at(row).at(col - 1).value == board->at(row).at(col).value) {
                 return false;
             }
 
-            if (row != board->size() - 1 && board->at(row + 1).at(coll).value == board->at(row).at(coll).value) {
+            if (row != board->size() - 1 && board->at(row + 1).at(col).value == board->at(row).at(col).value) {
                 return false;
             }
 
-            if (row != 0 && board->at(row - 1).at(coll).value == board->at(row).at(coll).value) {
+            if (row != 0 && board->at(row - 1).at(col).value == board->at(row).at(col).value) {
                 return false;
             }
         }
@@ -123,7 +121,7 @@ bool gameLost(Board* board) {
     return true;
 }
 
-void editField(std::string name, int* variable, std::pair<int, int> range) {
+void editField(const std::string& name, int* variable, const std::pair<int, int> range) {
     Popup field = Popup(16, 1, 5, 22);
     field.setTitle("Set " + name);
     mvwprintw(field.m_win, 1, 1, "currently: %d", *variable);
@@ -155,12 +153,11 @@ void editField(std::string name, int* variable, std::pair<int, int> range) {
     }
 
     *variable = intAnswer;
-    return;
 }
 
 void editOptions(App* appConfig, const int row, const int column) {
     const SelectMenu::Option BoardRows = {"Board Rows", true, &appConfig->playRows};
-    const SelectMenu::Option BoardColumns = {"Board Columns", true, &appConfig->playCollumns};
+    const SelectMenu::Option BoardColumns = {"Board Columns", true, &appConfig->playColumns};
     const SelectMenu::Option TileHeight = {"Tile Height", true, &appConfig->tileHeigth};
     const SelectMenu::Option TileWidth = {"Tile Width", true, &appConfig->tileWidth};
     const SelectMenu::Option EmptyLine = {"", false, nullptr};
@@ -176,7 +173,7 @@ void editOptions(App* appConfig, const int row, const int column) {
                 editField("Board Rows", &appConfig->playRows, {3, 100});
                 break;
             case 1:
-                editField("Board Columns", &appConfig->playCollumns, {3, 100});
+                editField("Board Columns", &appConfig->playColumns, {3, 100});
                 break;
             case 2:
                 editField("Tile Height", &appConfig->tileHeigth, {3, 10});

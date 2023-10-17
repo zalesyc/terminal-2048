@@ -15,7 +15,7 @@ Board::moveReturn Board::moveLeft() {
     for (int row = 0; row < this->m_rows; row++) {
         Board::SingleTileMoveData singleTileMoveData;
         for (int col = 0; col < this->m_rows; col++) {
-            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+            Board::singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
         }
     }
     refresh();
@@ -27,7 +27,7 @@ Board::moveReturn Board::moveRight() {
     for (int row = 0; row < this->m_rows; row++) {
         Board::SingleTileMoveData singleTileMoveData;
         for (int col = this->m_columns - 1; col >= 0; col--) {
-            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+            Board::singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
         }
     }
     refresh();
@@ -39,7 +39,7 @@ Board::moveReturn Board::moveUp() {
     for (int col = 0; col < this->m_columns; col++) {
         Board::SingleTileMoveData singleTileMoveData;
         for (int row = 0; row < this->m_rows; row++) {
-            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+            Board::singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
         }
     }
     refresh();
@@ -51,7 +51,7 @@ Board::moveReturn Board::moveDown() {
     for (int col = 0; col < this->m_columns; col++) {
         Board::SingleTileMoveData singleTileMoveData;
         for (int row = this->m_rows - 1; row >= 0; row--) {
-            this->singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
+            Board::singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
         }
     }
     refresh();

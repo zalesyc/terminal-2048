@@ -1,6 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
-#include <ncurses.h>
+#include <ncurses/curses.h>
 #include <queue>
 #include <vector>
 
@@ -8,7 +8,7 @@
 
 class Board : public std::vector<std::vector<Tile>> {
   public:
-    Board(const int rows, const int columns);
+    Board(int rows, int columns);
 
     enum moveReturn { Ok,
                       NoneMoved,
@@ -18,7 +18,7 @@ class Board : public std::vector<std::vector<Tile>> {
     moveReturn moveRight();
     moveReturn moveUp();
     moveReturn moveDown();
-    Tile& get(const int row, const int column);
+    Tile& get(int row, int column);
     void redrawAll();
     void populateWithRandomTwos();
 
@@ -32,8 +32,7 @@ class Board : public std::vector<std::vector<Tile>> {
         std::queue<Tile*> freeTiles;
     };
 
-  private:
-    void singleTileMove(Board::SingleTileMoveData* data, Tile& currentTile, bool* wasMoved);
+    static void singleTileMove(Board::SingleTileMoveData* data, Tile& currentTile, bool* wasMoved);
 };
 
 #endif // BOARD_H
