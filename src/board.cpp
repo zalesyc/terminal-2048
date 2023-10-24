@@ -14,7 +14,7 @@ Board::moveReturn Board::moveLeft() {
     bool wasMoved = false;
     for (int row = 0; row < this->m_rows; row++) {
         Board::SingleTileMoveData singleTileMoveData;
-        for (int col = 0; col < this->m_rows; col++) {
+        for (int col = 0; col < this->m_columns; col++) {
             Board::singleTileMove(&singleTileMoveData, this->get(row, col), &wasMoved);
         }
     }
