@@ -44,6 +44,7 @@ void boardInit(Board* board) {
         }
     }
     board->populateWithRandomTwos();
+    mvprintw(1, 1, "Score: %i", score); 
     refresh();
 }
 

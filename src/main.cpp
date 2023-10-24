@@ -11,6 +11,7 @@
 #include "tile.hpp"
 
 App appConfig;
+int score = 0;
 
 int main(int argc, const char* argv[]) {
 
@@ -106,28 +107,26 @@ int main(int argc, const char* argv[]) {
 
             case KEY_UP:
             case (char)'w':
-                mvprintw(1, 1, "up   ");
                 returnMsg = board.moveUp();
                 break;
 
             case KEY_DOWN:
             case (char)'s':
-                mvprintw(1, 1, "down ");
                 returnMsg = board.moveDown();
                 break;
 
             case KEY_RIGHT:
             case (char)'d':
-                mvprintw(1, 1, "right");
                 returnMsg = board.moveRight();
                 break;
 
             case KEY_LEFT:
             case (char)'a':
-                mvprintw(1, 1, "left ");
                 returnMsg = board.moveLeft();
                 break;
         }
+        mvprintw(1, 1, "Score: %i", score);
+        refresh();
 
         if (returnMsg == Board::moveReturn::Ok) {
             bool noZeroInBoard = true;

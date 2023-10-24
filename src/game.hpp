@@ -25,5 +25,6 @@ int randomNumber(int min, int max);
 bool gameLost(Board* board);
 
 extern App appConfig;
+extern int score;
 
 #endif // APP_H

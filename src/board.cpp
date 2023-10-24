@@ -64,9 +64,11 @@ void Board::singleTileMove(Board::SingleTileMoveData* data, Tile& currentTile, b
         return;
     }
 
+    // merge
     if (currentTile.value == data->waitingFor) {
         data->waitingFor = 0;
         data->waiter->setValue(data->waiter->value * 2);
+        score += data->waiter->value;
         currentTile.setValue(0);
         data->freeTiles.push(&currentTile);
         *wasMoved = true;
