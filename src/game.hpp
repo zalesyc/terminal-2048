@@ -19,9 +19,11 @@ enum welcomeScreenReturn { Play,
                            Exit };
 
 void colors();
-void boardInit(Board* board, App* appConfig);
-welcomeScreenReturn welcomeScreen(App* appConfig);
+void boardInit(Board* board);
+welcomeScreenReturn welcomeScreen();
 int randomNumber(int min, int max);
 bool gameLost(Board* board);
+
+extern App appConfig;
 
 #endif // APP_H
