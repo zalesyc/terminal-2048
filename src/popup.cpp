@@ -83,7 +83,7 @@ int SelectMenu::verticalMenu(WINDOW* win, int row, const int column, const std::
                     choice = (choice + 1) % options.size();
                 }
                 break;
-            case ENTER: 
+            case ENTER:
                 return choice;
         }
     }
