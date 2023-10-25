@@ -10,21 +10,18 @@ class Popup {
     Popup(int row, int column, int height, int width);
     ~Popup();
 
-    void setText(const std::string& text);
+    void setTextCenteredAtRow(int row, const std::string& text) const;
     void setTitle(const std::string& text) const;
     void delWindow() const;
 
   private:
-    std::string print(int width);
+    static std::string centerText(int width, const std::string& text);
     void drawWindow(int row, int column, int height, int width);
 
   public:
     WINDOW* m_win;
     int m_winWidth;
     int m_winHeight;
-
-  private:
-    std::string m_text;
 };
 
 namespace SelectMenu {

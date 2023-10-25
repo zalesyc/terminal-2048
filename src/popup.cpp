@@ -1,4 +1,3 @@
-#include <cmath>
 #include <ncurses/curses.h>
 #include <string>
 #include <vector>
@@ -19,9 +18,8 @@ void Popup::delWindow() const {
     delwin(m_win);
 }
 
-void Popup::setText(const std::string& text) {
-    this->m_text = text;
-    mvwprintw(m_win, std::ceil((m_winHeight / 2.0) - 1), 1, "%s", this->print(m_winWidth - 2).c_str());
+void Popup::setTextCenteredAtRow(const int row, const std::string& text) const {
+    mvwprintw(m_win, row, 1, "%s", Popup::centerText(m_winWidth - 2, text).c_str());
     wrefresh(m_win);
 }
 
@@ -30,15 +28,15 @@ void Popup::setTitle(const std::string& text) const {
     wrefresh(this->m_win);
 }
 
-std::string Popup::print(int width) {
-    if (width < m_text.length()) {
-        return m_text;
+std::string Popup::centerText(const int width, const std::string& text) {
+    if (width < text.length()) {
+        return text;
     }
 
-    int diff = width - m_text.length();
+    int diff = width - text.length();
     int pad1 = diff / 2;
     int pad2 = diff - pad1;
-    return std::string(pad1, ' ') + m_text + std::string(pad2, ' ');
+    return std::string(pad1, ' ') + text + std::string(pad2, ' ');
 }
 
 void Popup::drawWindow(const int row, const int column, const int height, const int width) {

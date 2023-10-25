@@ -138,7 +138,8 @@ int main(int argc, const char* argv[]) {
                     } else if (tile.value == 2048 && !alreadyWon) {
                         // win popup
                         Popup winPopup(2, 2, 10, 40);
-                        winPopup.setText("YOU WON !");
+                        winPopup.setTextCenteredAtRow(1, "YOU WON !");
+                        winPopup.setTextCenteredAtRow(2, "Score: " + std::to_string(score));
                         int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
                         if (option == 0) {
                             clear();
@@ -158,7 +159,8 @@ int main(int argc, const char* argv[]) {
                 if (gameLost(&board)) {
                     // lose popup
                     Popup lostPopup(2, 2, 10, 40);
-                    lostPopup.setText("YOU LOST !");
+                    lostPopup.setTextCenteredAtRow(1, "YOU LOST !");
+                    lostPopup.setTextCenteredAtRow(2, "Score: " + std::to_string(score));
                     while (getch() != 'c') {
                     }
                     endwin();
