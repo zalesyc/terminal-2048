@@ -11,7 +11,7 @@
 #include "popup.hpp"
 
 void editField(std::string& name, int* variable, std::pair<int, int> range);
-void editOptions(App* appConfig, int row, int column);
+void editOptions(int row, int column);
 void showHelp(int row, int column);
 void showAbout(int row, int column);
 
@@ -25,15 +25,15 @@ void colors() {
     init_pair(128, -1, COLOR_RED);
 }
 
-void boardInit(Board* board, App* appConfig) {
-    for (int row = 0; row < appConfig->playRows; row++) {
-        for (int col = 0; col < appConfig->playColumns; col++) {
-            board->at(row).at(col).window = newwin(appConfig->tileHeigth, appConfig->tileWidth, (row * appConfig->tileHeigth) + appConfig->boardStartingRow, (col * appConfig->tileWidth) + appConfig->boardStartingColumn);
-            board->at(row).at(col).width = appConfig->tileWidth;
-            board->at(row).at(col).heigth = appConfig->tileHeigth;
+void boardInit(Board* board) {
+    for (int row = 0; row < appConfig.playRows; row++) {
+        for (int col = 0; col < appConfig.playColumns; col++) {
+            board->at(row).at(col).window = newwin(appConfig.tileHeigth, appConfig.tileWidth, (row * appConfig.tileHeigth) + appConfig.boardStartingRow, (col * appConfig.tileWidth) + appConfig.boardStartingColumn);
+            board->at(row).at(col).width = appConfig.tileWidth;
+            board->at(row).at(col).heigth = appConfig.tileHeigth;
             board->at(row).at(col).setValue(0, true);
 
-            if (appConfig->useColor) {
+            if (appConfig.useColor) {
                 wbkgd(board->at(row).at(col).window,
                       COLOR_PAIR((board->at(row).at(col).value <= 128) ? board->at(row).at(col).value : 128));
             } else {
@@ -44,10 +44,11 @@ void boardInit(Board* board, App* appConfig) {
         }
     }
     board->populateWithRandomTwos();
+    mvprintw(1, 1, "Score: %i", score);
     refresh();
 }
 
-welcomeScreenReturn welcomeScreen(App* appConfig) {
+welcomeScreenReturn welcomeScreen() {
     clear();
     const std::array<std::string, 6> asciiText = {
         R"( ___   ___  _  _   ___  )",
@@ -67,7 +68,7 @@ welcomeScreenReturn welcomeScreen(App* appConfig) {
 
         switch (selectedOption) {
             case 0:
-                editOptions(appConfig, 7, 1);
+                editOptions(7, 1);
                 break;
 
             case 1:
@@ -155,11 +156,11 @@ void editField(const std::string& name, int* variable, const std::pair<int, int>
     *variable = intAnswer;
 }
 
-void editOptions(App* appConfig, const int row, const int column) {
-    const SelectMenu::Option BoardRows = {"Board Rows", true, &appConfig->playRows};
-    const SelectMenu::Option BoardColumns = {"Board Columns", true, &appConfig->playColumns};
-    const SelectMenu::Option TileHeight = {"Tile Height", true, &appConfig->tileHeigth};
-    const SelectMenu::Option TileWidth = {"Tile Width", true, &appConfig->tileWidth};
+void editOptions(const int row, const int column) {
+    const SelectMenu::Option BoardRows = {"Board Rows", true, &appConfig.playRows};
+    const SelectMenu::Option BoardColumns = {"Board Columns", true, &appConfig.playColumns};
+    const SelectMenu::Option TileHeight = {"Tile Height", true, &appConfig.tileHeigth};
+    const SelectMenu::Option TileWidth = {"Tile Width", true, &appConfig.tileWidth};
     const SelectMenu::Option EmptyLine = {"", false, nullptr};
     const SelectMenu::Option Exit = {"End Editing", false, nullptr};
 
@@ -170,16 +171,16 @@ void editOptions(App* appConfig, const int row, const int column) {
         const int optionToEdit = SelectMenu::verticalMenu(popup.m_win, 1, 1, {BoardRows, BoardColumns, TileHeight, TileWidth, EmptyLine, Exit}, 5);
         switch (optionToEdit) {
             case 0:
-                editField("Board Rows", &appConfig->playRows, {3, 100});
+                editField("Board Rows", &appConfig.playRows, {3, 100});
                 break;
             case 1:
-                editField("Board Columns", &appConfig->playColumns, {3, 100});
+                editField("Board Columns", &appConfig.playColumns, {3, 100});
                 break;
             case 2:
-                editField("Tile Height", &appConfig->tileHeigth, {3, 10});
+                editField("Tile Height", &appConfig.tileHeigth, {3, 10});
                 break;
             case 3:
-                editField("Tile Width", &appConfig->tileWidth, {5, 15});
+                editField("Tile Width", &appConfig.tileWidth, {5, 15});
                 break;
             case 5:
                 return;

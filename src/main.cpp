@@ -10,33 +10,34 @@
 #include "popup.hpp"
 #include "tile.hpp"
 
+App appConfig;
+int score = 0;
+
 int main(int argc, const char* argv[]) {
-    // variables initialization
-    App app;
 
     // commandline arguments
     ArgumentParser argParser(argc, argv); // I cannot declare it in the if statement, because it is a different scope
     if (argc > 1) {
-        if (!argParser.setIntToOption("-r", &app.playRows, {3, 100})) {
+        if (!argParser.setIntToOption("-r", &appConfig.playRows, {3, 100})) {
             return 0;
         }
-        if (!argParser.setIntToOption("--rows", &app.playRows, {3, 100})) {
-            return 0;
-        }
-
-        if (!argParser.setIntToOption("-c", &app.playColumns, {3, 100})) {
+        if (!argParser.setIntToOption("--rows", &appConfig.playRows, {3, 100})) {
             return 0;
         }
 
-        if (!argParser.setIntToOption("--columns", &app.playColumns, {3, 100})) {
+        if (!argParser.setIntToOption("-c", &appConfig.playColumns, {3, 100})) {
             return 0;
         }
 
-        if (!argParser.setIntToOption("--tile-width", &app.tileWidth, {5, 15})) {
+        if (!argParser.setIntToOption("--columns", &appConfig.playColumns, {3, 100})) {
             return 0;
         }
 
-        if (!argParser.setIntToOption("--tile-height", &app.tileHeigth, {3, 10})) {
+        if (!argParser.setIntToOption("--tile-width", &appConfig.tileWidth, {5, 15})) {
+            return 0;
+        }
+
+        if (!argParser.setIntToOption("--tile-height", &appConfig.tileHeigth, {3, 10})) {
             return 0;
         }
 
@@ -60,13 +61,13 @@ int main(int argc, const char* argv[]) {
     curs_set(FALSE);
 
     if (argc > 0 && argParser.optionExists("--no-color")) {
-        app.useColor = false;
+        appConfig.useColor = false;
     } else {
-        app.useColor = has_colors();
+        appConfig.useColor = has_colors();
     }
 
     // terminal color init
-    if (app.useColor) {
+    if (appConfig.useColor) {
         start_color();
         use_default_colors();
         colors();
@@ -75,7 +76,7 @@ int main(int argc, const char* argv[]) {
 
     // welcome screen
     if (!argParser.optionExists("--skip-welcome")) {
-        if (welcomeScreen(&app) == welcomeScreenReturn::Exit) {
+        if (welcomeScreen() == welcomeScreenReturn::Exit) {
             endwin();
             return 0;
         }
@@ -83,12 +84,12 @@ int main(int argc, const char* argv[]) {
 
     // create and draw board
     mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
-    mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 1, 1, "How to play: ");
-    mvprintw(app.tileHeigth * app.playRows + app.boardStartingRow + 2, 1, "press 'c' to exit the game");
+    mvprintw(appConfig.tileHeigth * appConfig.playRows + appConfig.boardStartingRow + 1, 1, "How to play: ");
+    mvprintw(appConfig.tileHeigth * appConfig.playRows + appConfig.boardStartingRow + 2, 1, "press 'c' to exit the game");
     refresh();
 
-    Board board(app.playRows, app.playColumns);
-    boardInit(&board, &app);
+    Board board(appConfig.playRows, appConfig.playColumns);
+    boardInit(&board);
 
     // game loop
     bool alreadyWon = false;
@@ -106,40 +107,39 @@ int main(int argc, const char* argv[]) {
 
             case KEY_UP:
             case (char)'w':
-                mvprintw(1, 1, "up   ");
                 returnMsg = board.moveUp();
                 break;
 
             case KEY_DOWN:
             case (char)'s':
-                mvprintw(1, 1, "down ");
                 returnMsg = board.moveDown();
                 break;
 
             case KEY_RIGHT:
             case (char)'d':
-                mvprintw(1, 1, "right");
                 returnMsg = board.moveRight();
                 break;
 
             case KEY_LEFT:
             case (char)'a':
-                mvprintw(1, 1, "left ");
                 returnMsg = board.moveLeft();
                 break;
         }
+        mvprintw(1, 1, "Score: %i", score);
+        refresh();
 
         if (returnMsg == Board::moveReturn::Ok) {
             bool noZeroInBoard = true;
             for (auto& row : board) {
                 for (Tile& tile : row) {
-                    tile.addRandTwos(app.moveProbability);
+                    tile.addRandTwos(appConfig.moveProbability);
                     if (tile.value == 0) {
                         noZeroInBoard = false;
                     } else if (tile.value == 2048 && !alreadyWon) {
                         // win popup
                         Popup winPopup(2, 2, 10, 40);
-                        winPopup.setText("YOU WON !");
+                        winPopup.setTextCenteredAtRow(1, "YOU WON !");
+                        winPopup.setTextCenteredAtRow(2, "Score: " + std::to_string(score));
                         int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
                         if (option == 0) {
                             clear();
@@ -159,7 +159,8 @@ int main(int argc, const char* argv[]) {
                 if (gameLost(&board)) {
                     // lose popup
                     Popup lostPopup(2, 2, 10, 40);
-                    lostPopup.setText("YOU LOST !");
+                    lostPopup.setTextCenteredAtRow(1, "YOU LOST !");
+                    lostPopup.setTextCenteredAtRow(2, "Score: " + std::to_string(score));
                     while (getch() != 'c') {
                     }
                     endwin();
