@@ -83,9 +83,10 @@ int main(int argc, const char* argv[]) {
     }
 
     // create and draw board
-    mvprintw(0, 1, "THE BEST TERMINAL BASED 2048");
+    mvprintw(0, 1, "TERMINAL 2048");
     mvprintw(appConfig.tileHeigth * appConfig.playRows + appConfig.boardStartingRow + 1, 1, "How to play: ");
-    mvprintw(appConfig.tileHeigth * appConfig.playRows + appConfig.boardStartingRow + 2, 1, "press 'c' to exit the game");
+    mvprintw(appConfig.tileHeigth * appConfig.playRows + appConfig.boardStartingRow + 2, 3, "Press 'q' to exit the game");
+    mvprintw(appConfig.tileHeigth * appConfig.playRows + appConfig.boardStartingRow + 3, 3, "Use arrows or WSAD to move the tiles");
     refresh();
 
     Board board(appConfig.playRows, appConfig.playColumns);
@@ -140,7 +141,7 @@ int main(int argc, const char* argv[]) {
                         Popup winPopup(2, 2, 10, 40);
                         winPopup.setTextCenteredAtRow(1, "YOU WON !");
                         winPopup.setTextCenteredAtRow(2, "Score: " + std::to_string(score));
-                        int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 0);
+                        int option = SelectMenu::horizontalMenu(winPopup.m_win, winPopup.m_winHeight - 2, 1, {"Exit", "Continue Playing"}, 1);
                         if (option == 0) {
                             clear();
                             refresh();

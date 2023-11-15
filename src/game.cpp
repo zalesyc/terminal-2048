@@ -123,10 +123,9 @@ bool gameLost(Board* board) {
 }
 
 void editField(const std::string& name, int* variable, const std::pair<int, int> range) {
-    Popup field = Popup(16, 1, 5, 22);
+    Popup field = Popup(16, 1, 4, 22);
     field.setTitle("Set " + name);
     mvwprintw(field.m_win, 1, 1, "currently: %d", *variable);
-    mvwprintw(field.m_win, 3, 1, "Press 'c' to cancel");
     curs_set(true);
     echo();
     wmove(field.m_win, 2, 1);
