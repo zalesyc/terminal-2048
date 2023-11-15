@@ -24,7 +24,7 @@ class Popup {
     int m_winHeight;
 
   private:
-    bool windowDeleted = true;
+    bool windowDeleted = false;
 };
 
 namespace SelectMenu {

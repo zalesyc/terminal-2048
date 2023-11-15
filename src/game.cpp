@@ -218,7 +218,7 @@ void showAbout(const int row, const int column) {
     Popup popup = Popup(row, column, 8, 56);
     popup.setTitle("2048 Help");
     mvwprintw(popup.m_win, 1, 1, "Clone of the game 2048, played in terminal");
-    mvwprintw(popup.m_win, 2, 1, "Autor: Alex Cizinsky - https://www.github.com/zalesyc");
+    mvwprintw(popup.m_win, 2, 1, "Author: Alex Cizinsky - https://www.github.com/zalesyc");
     mvwprintw(popup.m_win, 3, 1, "Licence: GPLv3");
     mvwprintw(popup.m_win, 3, 1, "Source Code: https://github.com/zalesyc/terminal-2048");
 
