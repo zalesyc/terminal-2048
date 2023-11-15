@@ -12,7 +12,7 @@ class Popup {
 
     void setTextCenteredAtRow(int row, const std::string& text) const;
     void setTitle(const std::string& text) const;
-    void delWindow() const;
+    void delWindow();
 
   private:
     static std::string centerText(int width, const std::string& text);
@@ -22,6 +22,9 @@ class Popup {
     WINDOW* m_win;
     int m_winWidth;
     int m_winHeight;
+
+  private:
+    bool windowDeleted = true;
 };
 
 namespace SelectMenu {

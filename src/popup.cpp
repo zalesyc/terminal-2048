@@ -12,10 +12,13 @@ Popup::~Popup() {
     this->delWindow();
 }
 
-void Popup::delWindow() const {
-    werase(m_win);
-    wrefresh(m_win);
-    delwin(m_win);
+void Popup::delWindow() {
+    if (!this->windowDeleted) {
+        werase(m_win);
+        wrefresh(m_win);
+        delwin(m_win);
+        this->windowDeleted = true;
+    }
 }
 
 void Popup::setTextCenteredAtRow(const int row, const std::string& text) const {
