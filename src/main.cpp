@@ -19,26 +19,26 @@ int main(int argc, const char* argv[]) {
     ArgumentParser argParser(argc, argv); // I cannot declare it in the if statement, because it is a different scope
     if (argc > 1) {
         if (!argParser.setIntToOption("-r", &appConfig.playRows, {3, 100})) {
-            return 0;
+            return 1;
         }
         if (!argParser.setIntToOption("--rows", &appConfig.playRows, {3, 100})) {
-            return 0;
+            return 1;
         }
 
         if (!argParser.setIntToOption("-c", &appConfig.playColumns, {3, 100})) {
-            return 0;
+            return 1;
         }
 
         if (!argParser.setIntToOption("--columns", &appConfig.playColumns, {3, 100})) {
-            return 0;
+            return 1;
         }
 
         if (!argParser.setIntToOption("--tile-width", &appConfig.tileWidth, {5, 15})) {
-            return 0;
+            return 1;
         }
 
         if (!argParser.setIntToOption("--tile-height", &appConfig.tileHeigth, {3, 10})) {
-            return 0;
+            return 1;
         }
 
         if (argParser.optionExists("--help")) {
