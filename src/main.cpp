@@ -1,5 +1,5 @@
 #include <iostream>
-#include <ncurses/curses.h>
+#include <ncurses.h>
 #include <string>
 #include <utility>
 #include <vector>

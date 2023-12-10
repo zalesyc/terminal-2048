@@ -1,6 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
-#include <ncurses/curses.h>
+#include <ncurses.h>
 #include <queue>
 #include <vector>
 

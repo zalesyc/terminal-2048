@@ -1,7 +1,7 @@
 #ifndef POPUP_H
 #define POPUP_H
 
-#include <ncurses/curses.h>
+#include <ncurses.h>
 #include <string>
 #include <vector>
 

@@ -1,6 +1,6 @@
 #include <array>
 #include <cctype>
-#include <ncurses/curses.h>
+#include <ncurses.h>
 #include <random>
 #include <string>
 #include <utility>

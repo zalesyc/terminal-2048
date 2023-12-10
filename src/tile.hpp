@@ -1,7 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include <ncurses/curses.h>
+#include <ncurses.h>
 #include <string>
 
 class Tile {

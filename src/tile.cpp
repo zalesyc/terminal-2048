@@ -1,5 +1,5 @@
 #include <cmath>
-#include <ncurses/curses.h>
+#include <ncurses.h>
 #include <string>
 
 #include "game.hpp"
