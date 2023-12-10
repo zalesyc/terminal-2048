@@ -157,13 +157,18 @@ int main(int argc, const char* argv[]) {
             }
 
             if (noZeroInBoard) {
+                constexpr int ENTER = 10;
                 if (gameLost(&board)) {
                     // lose popup
                     Popup lostPopup(2, 2, 10, 40);
                     lostPopup.setTextCenteredAtRow(1, "YOU LOST !");
                     lostPopup.setTextCenteredAtRow(2, "Score: " + std::to_string(score));
-                    while (getch() != 'c') {
+                    int pressedChar = getch();
+                    while (pressedChar != 'c' && pressedChar != 'C' && pressedChar != 'q' && pressedChar != 'Q' && pressedChar != ENTER) {
+                        pressedChar = getch();
                     }
+                    clear();
+                    refresh();
                     endwin();
                     return 0;
                 }
